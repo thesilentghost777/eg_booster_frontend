@@ -185,48 +185,51 @@ export default function WalletPage() {
 
   return (
     <div className="min-h-screen bg-background dark">
-      {/* Header */}
-      <div className="gradient-dark px-4 pt-6 pb-20">
+      {/* Header avec safe area pour iPhone */}
+      <div className="gradient-dark px-4 pt-safe pb-20">
         <div className="max-w-lg mx-auto">
-          <div className="flex items-center gap-3 mb-6">
+          {/* Header sticky pour meilleure navigation */}
+          <div className="flex items-center gap-3 mb-6 pt-4">
             <button 
               onClick={() => navigate(-1)} 
-              className="text-muted-foreground hover:text-foreground transition-colors"
+              className="text-muted-foreground hover:text-foreground transition-colors active:scale-95 p-2 -ml-2 rounded-xl hover:bg-white/5"
+              aria-label="Retour"
             >
               <ArrowLeft className="w-6 h-6" />
             </button>
             <h1 className="text-xl font-display font-bold text-foreground">Mon Portefeuille</h1>
           </div>
 
-          {/* Balance card */}
-          <div className="bg-card/90 backdrop-blur-xl rounded-3xl p-6 border border-border/50">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-16 h-16 gradient-secondary rounded-2xl flex items-center justify-center shadow-glow">
-                <Wallet className="w-8 h-8 text-white" />
+          {/* Balance card - Optimisé pour mobile */}
+          <div className="bg-card/90 backdrop-blur-xl rounded-3xl p-5 sm:p-6 border border-border/50 shadow-2xl">
+            <div className="flex items-start sm:items-center gap-4 mb-6">
+              <div className="w-14 h-14 sm:w-16 sm:h-16 gradient-secondary rounded-2xl flex items-center justify-center shadow-glow shrink-0">
+                <Wallet className="w-7 h-7 sm:w-8 sm:h-8 text-white" />
               </div>
-              <div>
-                <p className="text-sm text-muted-foreground font-medium">Solde disponible</p>
-                <p className="text-4xl font-display font-bold text-foreground">
+              <div className="min-w-0 flex-1">
+                <p className="text-xs sm:text-sm text-muted-foreground font-medium mb-1">Solde disponible</p>
+                <p className="text-3xl sm:text-4xl font-display font-bold text-foreground tracking-tight leading-none">
                   {user?.points_balance?.toLocaleString() || 0}
                 </p>
-                <p className="text-sm text-muted-foreground">≈ {user?.points_balance?.toLocaleString() || 0} FCFA</p>
+                <p className="text-xs sm:text-sm text-muted-foreground mt-1">≈ {user?.points_balance?.toLocaleString() || 0} FCFA</p>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-2 sm:gap-3">
               <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                 <DialogTrigger asChild>
-                  <Button className="gradient-primary text-white rounded-xl h-12">
-                    <Plus className="w-5 h-5 mr-2" />
+                  <Button className="gradient-primary text-white rounded-xl h-11 sm:h-12 text-sm sm:text-base font-semibold active:scale-95 transition-transform">
+                    <Plus className="w-4 h-4 sm:w-5 sm:h-5 mr-1.5 sm:mr-2" />
                     Recharger
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="bg-card border-border/50 max-w-md">
-                  <DialogHeader>
-                    <DialogTitle className="text-xl font-display text-foreground">Recharger mon compte</DialogTitle>
+                <DialogContent className="bg-card border-border/50 max-w-[calc(100vw-2rem)] sm:max-w-md mx-4 rounded-2xl max-h-[90vh] overflow-y-auto">
+                  <DialogHeader className="pb-2">
+                    <DialogTitle className="text-lg sm:text-xl font-display text-foreground">Recharger mon compte</DialogTitle>
                   </DialogHeader>
                   
-                  <div className="space-y-4 mt-4">
+                  <div className="space-y-4 mt-2">
+                    {/* Montants rapides */}
                     <div>
                       <Label className="text-sm font-semibold text-foreground mb-2 block">Montant rapide</Label>
                       <div className="grid grid-cols-3 gap-2">
@@ -235,7 +238,7 @@ export default function WalletPage() {
                             key={amount}
                             onClick={() => setDepositAmount(amount.toString())}
                             className={cn(
-                              "py-3 rounded-xl font-medium transition-all",
+                              "py-2.5 sm:py-3 rounded-xl font-medium transition-all text-sm sm:text-base active:scale-95",
                               depositAmount === amount.toString()
                                 ? "gradient-primary text-white shadow-glow"
                                 : "bg-muted text-foreground hover:bg-muted/80"
@@ -247,77 +250,83 @@ export default function WalletPage() {
                       </div>
                     </div>
 
+                    {/* Montant personnalisé */}
                     <div>
                       <Label className="text-sm font-semibold text-foreground">Montant personnalisé (FCFA)</Label>
                       <Input
                         type="number"
+                        inputMode="numeric"
                         placeholder="Entrez le montant"
                         value={depositAmount}
                         onChange={(e) => setDepositAmount(e.target.value)}
-                        className="h-12 mt-2 bg-muted/80 border border-border/50 text-foreground placeholder:text-muted-foreground/60"
+                        className="h-12 mt-2 bg-muted/80 border border-border/50 text-foreground placeholder:text-muted-foreground/60 text-base"
                       />
-                      <p className="text-xs text-muted-foreground mt-1">
+                      <p className="text-xs text-muted-foreground mt-1.5">
                         Minimum: 500 FCFA
                       </p>
                     </div>
 
+                    {/* Mode de paiement */}
                     <div>
                       <Label className="text-sm font-semibold text-foreground mb-2 block">Mode de paiement</Label>
-                      <div className="grid grid-cols-2 gap-3">
+                      <div className="grid grid-cols-2 gap-2 sm:gap-3">
                         <button
                           onClick={() => setPaymentMethod('momo')}
                           className={cn(
-                            "p-4 rounded-xl border-2 transition-all text-left",
+                            "p-3 sm:p-4 rounded-xl border-2 transition-all text-left active:scale-95",
                             paymentMethod === 'momo'
                               ? "border-primary bg-primary/10"
                               : "border-border hover:border-muted-foreground"
                           )}
                         >
-                          <div className="w-10 h-10 bg-yellow-400 rounded-lg flex items-center justify-center mb-2">
-                            <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
-                              <span className="text-white font-bold text-lg">M</span>
+                          <div className="w-9 h-9 sm:w-10 sm:h-10 bg-yellow-400 rounded-lg flex items-center justify-center mb-2">
+                            <div className="w-7 h-7 sm:w-8 sm:h-8 bg-yellow-500 rounded-full flex items-center justify-center">
+                              <span className="text-white font-bold text-base sm:text-lg">M</span>
                             </div>
                           </div>
-                          <p className="font-medium mt-1 text-foreground">MTN MoMo</p>
+                          <p className="font-medium text-sm sm:text-base text-foreground">MTN MoMo</p>
                           <p className="text-xs text-muted-foreground mt-0.5">Mobile Money</p>
                         </button>
                         <button
                           onClick={() => setPaymentMethod('om')}
                           className={cn(
-                            "p-4 rounded-xl border-2 transition-all text-left",
+                            "p-3 sm:p-4 rounded-xl border-2 transition-all text-left active:scale-95",
                             paymentMethod === 'om'
                               ? "border-primary bg-primary/10"
                               : "border-border hover:border-muted-foreground"
                           )}
                         >
-                          <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center mb-2">
-                            <span className="text-white font-bold text-lg">OM</span>
+                          <div className="w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center mb-2">
+                            <span className="text-white font-bold text-base sm:text-lg">OM</span>
                           </div>
-                          <p className="font-medium mt-1 text-foreground">Orange Money</p>
+                          <p className="font-medium text-sm sm:text-base text-foreground">Orange Money</p>
                           <p className="text-xs text-muted-foreground mt-0.5">Mobile Money</p>
                         </button>
                       </div>
                     </div>
 
+                    {/* Numéro de téléphone */}
                     <div>
                       <Label className="text-sm font-semibold text-foreground">Numéro de téléphone</Label>
                       <div className="relative mt-2">
-                        <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                        <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
                         <Input
                           type="tel"
+                          inputMode="tel"
                           placeholder="237XXXXXXXXX"
                           value={phoneNumber}
                           onChange={handlePhoneInput}
-                          className="h-12 pl-11 bg-muted/80 border border-border/50 text-foreground placeholder:text-muted-foreground/60 font-mono"
+                          className="h-12 pl-11 bg-muted/80 border border-border/50 text-foreground placeholder:text-muted-foreground/60 font-mono text-base"
                           maxLength={12}
                         />
                       </div>
-                      <p className="text-xs text-muted-foreground mt-1">
+                      <p className="text-xs text-muted-foreground mt-1.5">
                         Format: 237 suivi de 9 chiffres (ex: 237690123456)
                       </p>
                     </div>
 
-                    <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4">
+                    {/* Info box */}
+                    <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-3 sm:p-4">
                       <p className="text-sm font-medium text-blue-400 mb-2">ℹ️ Comment ça marche ?</p>
                       <ol className="text-xs text-muted-foreground space-y-1 list-decimal list-inside">
                         <li>Entrez le montant et votre numéro</li>
@@ -327,9 +336,10 @@ export default function WalletPage() {
                       </ol>
                     </div>
 
+                    {/* Button de confirmation */}
                     <Button
                       onClick={handleDeposit}
-                      className="w-full h-14 gradient-primary text-white rounded-xl font-semibold"
+                      className="w-full h-12 sm:h-14 gradient-primary text-white rounded-xl font-semibold text-sm sm:text-base active:scale-95 transition-transform"
                       disabled={isDepositing || !depositAmount || !phoneNumber || parseInt(depositAmount) < 500}
                     >
                       {isDepositing ? (
@@ -338,7 +348,7 @@ export default function WalletPage() {
                           <span>Initialisation...</span>
                         </div>
                       ) : (
-                        `Confirmer le dépôt de ${depositAmount ? parseInt(depositAmount).toLocaleString() : 0} FCFA`
+                        `Confirmer ${depositAmount ? parseInt(depositAmount).toLocaleString() : 0} FCFA`
                       )}
                     </Button>
                   </div>
@@ -347,10 +357,10 @@ export default function WalletPage() {
 
               <Button 
                 variant="outline" 
-                className="rounded-xl h-12 border-border/50 hover:bg-muted/50"
+                className="rounded-xl h-11 sm:h-12 border-border/50 hover:bg-muted/50 text-sm sm:text-base active:scale-95 transition-transform"
                 onClick={() => loadTransactions()}
               >
-                <History className="w-5 h-5 mr-2" />
+                <History className="w-4 h-4 sm:w-5 sm:h-5 mr-1.5 sm:mr-2" />
                 Actualiser
               </Button>
             </div>
@@ -360,40 +370,40 @@ export default function WalletPage() {
 
       {/* Payment Pending Dialog */}
       <Dialog open={showPaymentPending} onOpenChange={setShowPaymentPending}>
-        <DialogContent className="bg-card border-border/50 max-w-md">
+        <DialogContent className="bg-card border-border/50 max-w-[calc(100vw-2rem)] sm:max-w-md mx-4 rounded-2xl">
           <DialogHeader>
-            <DialogTitle className="text-xl font-display text-foreground text-center">
+            <DialogTitle className="text-lg sm:text-xl font-display text-foreground text-center">
               Paiement en attente
             </DialogTitle>
           </DialogHeader>
           
-          <div className="space-y-6 py-4">
+          <div className="space-y-5 sm:space-y-6 py-4">
             {/* Loading animation */}
             <div className="flex justify-center">
-              <div className="w-20 h-20 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
+              <div className="w-16 h-16 sm:w-20 sm:h-20 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
             </div>
 
             {/* Instructions */}
-            <div className="text-center space-y-3">
-              <p className="text-lg font-semibold text-foreground">
+            <div className="text-center space-y-2 sm:space-y-3 px-2">
+              <p className="text-base sm:text-lg font-semibold text-foreground">
                 Validez le paiement sur votre téléphone
               </p>
               <p className="text-sm text-muted-foreground">
-                Une notification a été envoyée au <span className="font-mono font-medium text-foreground">{phoneNumber}</span>
+                Une notification a été envoyée au <span className="font-mono font-medium text-foreground block sm:inline mt-1 sm:mt-0">{phoneNumber}</span>
               </p>
             </div>
 
-            {/* USSD code - Conditionnel selon la méthode */}
-            <div className="bg-muted/50 border border-border rounded-xl p-4 space-y-3">
-              <p className="text-sm font-medium text-foreground text-center">
+            {/* USSD code */}
+            <div className="bg-muted/50 border border-border rounded-xl p-3 sm:p-4 space-y-3">
+              <p className="text-xs sm:text-sm font-medium text-foreground text-center">
                 Si la fenêtre ne s'ouvre pas automatiquement :
               </p>
               <div className="flex items-center justify-center bg-card rounded-lg p-4 border border-border">
                 <div className="text-center">
-                  <p className="text-sm text-muted-foreground mb-2">
+                  <p className="text-xs sm:text-sm text-muted-foreground mb-2">
                     {pendingPaymentMethod === 'om' ? 'Orange Money' : 'MTN MoMo'}
                   </p>
-                  <code className="text-3xl font-bold text-primary font-mono">
+                  <code className="text-2xl sm:text-3xl font-bold text-primary font-mono">
                     {pendingPaymentMethod === 'om' ? '#150#' : '*126#'}
                   </code>
                   <p className="text-xs text-muted-foreground mt-2">Composez ce code</p>
@@ -403,7 +413,7 @@ export default function WalletPage() {
 
             {/* Status message */}
             <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-3">
-              <p className="text-xs text-center text-muted-foreground">
+              <p className="text-xs text-center text-muted-foreground leading-relaxed">
                 La vérification du paiement se fait automatiquement. Cette fenêtre se fermera dès confirmation.
               </p>
             </div>
@@ -411,7 +421,7 @@ export default function WalletPage() {
             {/* Cancel button */}
             <Button
               variant="outline"
-              className="w-full"
+              className="w-full h-11 sm:h-12 active:scale-95 transition-transform"
               onClick={() => setShowPaymentPending(false)}
             >
               Fermer
@@ -420,24 +430,24 @@ export default function WalletPage() {
         </DialogContent>
       </Dialog>
 
-      {/* Transactions */}
-      <div className="px-4 -mt-8 max-w-lg mx-auto pb-24">
-        <div className="bg-card rounded-2xl border border-border overflow-hidden">
-          <div className="flex items-center gap-2 p-4 border-b border-border">
+      {/* Transactions - Optimisé pour mobile */}
+      <div className="px-4 -mt-8 max-w-lg mx-auto pb-safe pb-24">
+        <div className="bg-card rounded-2xl border border-border overflow-hidden shadow-xl">
+          <div className="flex items-center gap-2 p-4 border-b border-border bg-card/50 sticky top-0 z-10 backdrop-blur-sm">
             <History className="w-5 h-5 text-muted-foreground" />
-            <h2 className="font-semibold text-foreground">Historique des transactions</h2>
+            <h2 className="font-semibold text-foreground text-sm sm:text-base">Historique des transactions</h2>
           </div>
 
           {isLoadingTx ? (
-            <div className="flex items-center justify-center p-8">
-              <div className="w-6 h-6 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
+            <div className="flex items-center justify-center p-12">
+              <div className="w-8 h-8 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
             </div>
           ) : (
             <div className="divide-y divide-border">
               {transactions.map((tx) => (
-                <div key={tx.id} className="flex items-center gap-4 p-4">
+                <div key={tx.id} className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 active:bg-muted/30 transition-colors">
                   <div className={cn(
-                    "w-10 h-10 rounded-xl flex items-center justify-center",
+                    "w-10 h-10 rounded-xl flex items-center justify-center shrink-0",
                     tx.points >= 0 ? "bg-success/20" : "bg-muted"
                   )}>
                     {tx.points >= 0 ? (
@@ -447,18 +457,18 @@ export default function WalletPage() {
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-foreground">{tx.type_label}</p>
-                    <p className="text-sm text-muted-foreground truncate">{tx.description}</p>
+                    <p className="font-medium text-foreground text-sm sm:text-base truncate">{tx.type_label}</p>
+                    <p className="text-xs sm:text-sm text-muted-foreground truncate">{tx.description}</p>
                   </div>
-                  <div className="text-right">
+                  <div className="text-right shrink-0">
                     <p className={cn(
-                      "font-bold",
+                      "font-bold text-sm sm:text-base",
                       tx.points >= 0 ? "text-success" : "text-foreground"
                     )}>
                       {tx.points >= 0 ? '+' : ''}{tx.points.toLocaleString()}
                     </p>
                     {tx.amount_fcfa && (
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-xs text-muted-foreground whitespace-nowrap">
                         {tx.amount_fcfa.toLocaleString()} FCFA
                       </p>
                     )}
@@ -469,9 +479,9 @@ export default function WalletPage() {
           )}
 
           {!isLoadingTx && transactions.length === 0 && (
-            <div className="p-8 text-center">
+            <div className="p-8 sm:p-12 text-center">
               <History className="w-12 h-12 mx-auto text-muted-foreground/30 mb-3" />
-              <p className="text-muted-foreground">Aucune transaction</p>
+              <p className="text-muted-foreground font-medium">Aucune transaction</p>
               <p className="text-sm text-muted-foreground/70 mt-1">
                 Effectuez votre premier dépôt pour commencer
               </p>

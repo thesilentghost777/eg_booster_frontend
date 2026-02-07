@@ -11,7 +11,8 @@ import {
   TrendingUp,
   Zap,
   Sparkles,
-  Loader2
+  Loader2,
+  MessageCircle
 } from 'lucide-react';
 import { 
   FaTiktok, 
@@ -178,46 +179,56 @@ export default function DashboardPage() {
     }
   };
 
+  // Fonction pour ouvrir WhatsApp
+  const openWhatsApp = () => {
+    const phoneNumber = '237680580837'; // Format international pour le Cameroun
+    const message = encodeURIComponent(`Bonjour, j'ai besoin d'aide concernant mon compte.`);
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
   return (
-    <div className="min-h-screen bg-background dark">
+    <div className="min-h-screen bg-background dark pb-safe">
       {/* Header with gradient */}
-      <div className="gradient-dark px-4 pt-6 pb-20">
+      <div className="gradient-dark px-4 sm:px-6 pt-safe pt-6 pb-20">
         <div className="max-w-lg mx-auto">
           {/* Welcome */}
           <div className="flex items-center justify-between mb-6">
-            <div>
-              <p className="text-muted-foreground">Bienvenue,</p>
-              <h1 className="text-2xl font-display font-bold text-foreground">{user?.prenom} 👋</h1>
+            <div className="min-w-0 flex-1">
+              <p className="text-muted-foreground text-sm">Bienvenue,</p>
+              <h1 className="text-2xl sm:text-3xl font-display font-bold text-foreground truncate">
+                {user?.prenom} 👋
+              </h1>
             </div>
-            <div className="w-12 h-12 gradient-primary rounded-xl flex items-center justify-center shadow-glow">
-              <Sparkles className="w-6 h-6 text-white" />
+            <div className="w-12 h-12 sm:w-14 sm:h-14 gradient-primary rounded-xl flex items-center justify-center shadow-glow flex-shrink-0 ml-3">
+              <Sparkles className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
             </div>
           </div>
 
           {/* Balance card */}
           <div 
             data-tour="balance-card"
-            className="bg-card/90 backdrop-blur-xl rounded-3xl p-6 border border-border/50 shadow-elevated"
+            className="bg-card/90 backdrop-blur-xl rounded-3xl p-5 sm:p-6 border border-border/50 shadow-elevated"
           >
             <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 gradient-secondary rounded-xl flex items-center justify-center">
-                  <Wallet className="w-6 h-6 text-white" />
+              <div className="flex items-center gap-3 min-w-0 flex-1">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 gradient-secondary rounded-xl flex items-center justify-center flex-shrink-0">
+                  <Wallet className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
                 </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Votre solde</p>
-                  <p className="text-3xl font-display font-bold text-foreground">
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs sm:text-sm text-muted-foreground">Votre solde</p>
+                  <p className="text-2xl sm:text-3xl font-display font-bold text-foreground truncate">
                     {user?.points_balance?.toLocaleString() || 0}
-                    <span className="text-lg text-muted-foreground ml-2">pts</span>
+                    <span className="text-base sm:text-lg text-muted-foreground ml-1 sm:ml-2">pts</span>
                   </p>
                 </div>
               </div>
               {balanceChange !== null && balanceChange !== 0 && (
                 <div className={cn(
-                  "flex items-center gap-1 text-sm font-medium",
+                  "flex items-center gap-1 text-xs sm:text-sm font-medium flex-shrink-0 ml-2",
                   balanceChange > 0 ? "text-success" : "text-destructive"
                 )}>
-                  <TrendingUp className={cn("w-4 h-4", balanceChange < 0 && "rotate-180")} />
+                  <TrendingUp className={cn("w-3 h-3 sm:w-4 sm:h-4", balanceChange < 0 && "rotate-180")} />
                   {balanceChange > 0 ? '+' : ''}{balanceChange.toFixed(1)}%
                 </div>
               )}
@@ -227,35 +238,34 @@ export default function DashboardPage() {
               <Link to="/wallet" className="flex-1">
                 <Button 
                   data-tour="recharge-btn"
-                  className="w-full gradient-primary text-white rounded-xl h-12"
+                  className="w-full gradient-primary text-white rounded-xl h-11 sm:h-12 text-sm sm:text-base touch-manipulation"
                 >
                   <Zap className="w-4 h-4 mr-2" />
                   Recharger
                 </Button>
               </Link>
-             
             </div>
           </div>
         </div>
       </div>
 
       {/* Content */}
-      <div className="px-4 -mt-8 max-w-lg mx-auto pb-4">
+      <div className="px-4 sm:px-6 -mt-8 max-w-lg mx-auto pb-24 sm:pb-4">
         {/* Free views banner */}
         {!user?.free_views_claimed && (
           <Link to="/free-views" className="block mb-6">
             <div 
               data-tour="free-views"
-              className="gradient-accent rounded-2xl p-4 flex items-center gap-4 shadow-glow animate-pulse-glow"
+              className="gradient-accent rounded-2xl p-4 flex items-center gap-3 sm:gap-4 shadow-glow animate-pulse-glow touch-manipulation active:scale-[0.98] transition-transform"
             >
-              <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                <Gift className="w-7 h-7 text-white" />
+              <div className="w-12 h-12 sm:w-14 sm:h-14 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                <Gift className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
               </div>
-              <div className="flex-1">
-                <p className="font-bold text-white">🎁 1000 Vues GRATUITES !</p>
-                <p className="text-sm text-white/80">Réclamez votre cadeau de bienvenue</p>
+              <div className="flex-1 min-w-0">
+                <p className="font-bold text-white text-sm sm:text-base">🎁 1000 Vues GRATUITES !</p>
+                <p className="text-xs sm:text-sm text-white/80 truncate">Réclamez votre cadeau de bienvenue</p>
               </div>
-              <ChevronRight className="w-6 h-6 text-white/80" />
+              <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 text-white/80 flex-shrink-0" />
             </div>
           </Link>
         )}
@@ -263,14 +273,23 @@ export default function DashboardPage() {
         {/* Quick actions */}
         <div 
           data-tour="quick-actions"
-          className="grid grid-cols-4 gap-3 mb-6"
+          className="grid grid-cols-4 gap-2 sm:gap-3 mb-6"
         >
           {quickActions.map((action) => (
-            <Link key={action.to} to={action.to} className="text-center">
-              <div className={cn("w-14 h-14 mx-auto rounded-2xl flex items-center justify-center mb-2 shadow-card", action.color)}>
-                <action.icon className="w-6 h-6 text-white" />
+            <Link 
+              key={action.to} 
+              to={action.to} 
+              className="text-center touch-manipulation active:scale-95 transition-transform"
+            >
+              <div className={cn(
+                "w-14 h-14 sm:w-16 sm:h-16 mx-auto rounded-2xl flex items-center justify-center mb-2 shadow-card",
+                action.color
+              )}>
+                <action.icon className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
               </div>
-              <span className="text-xs font-medium text-muted-foreground">{action.label}</span>
+              <span className="text-xs font-medium text-muted-foreground block truncate px-1">
+                {action.label}
+              </span>
             </Link>
           ))}
         </div>
@@ -281,8 +300,11 @@ export default function DashboardPage() {
           className="bg-card rounded-2xl border border-border overflow-hidden"
         >
           <div className="flex items-center justify-between p-4 border-b border-border">
-            <h2 className="font-semibold text-foreground">Dernières commandes</h2>
-            <Link to="/orders" className="text-sm text-primary font-medium flex items-center gap-1">
+            <h2 className="font-semibold text-foreground text-sm sm:text-base">Dernières commandes</h2>
+            <Link 
+              to="/orders" 
+              className="text-xs sm:text-sm text-primary font-medium flex items-center gap-1 touch-manipulation"
+            >
               Voir tout <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
@@ -300,16 +322,27 @@ export default function DashboardPage() {
                     const PlatformIcon = platformIcons[order.service.platform] || FaTiktok;
                     
                     return (
-                      <div key={order.id} className="flex items-center gap-4 p-4 hover:bg-muted/50 transition-colors">
-                        <div className="w-12 h-12 bg-muted rounded-xl flex items-center justify-center">
-                          <PlatformIcon className="w-6 h-6 text-muted-foreground" />
+                      <div 
+                        key={order.id} 
+                        className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-muted/50 active:bg-muted transition-colors touch-manipulation"
+                      >
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-muted rounded-xl flex items-center justify-center flex-shrink-0">
+                          <PlatformIcon className="w-5 h-5 sm:w-6 sm:h-6 text-muted-foreground" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="font-medium truncate text-foreground">{order.service.label}</p>
-                          <p className="text-sm text-muted-foreground">{formatDate(order.created_at)}</p>
+                          <p className="font-medium truncate text-foreground text-sm sm:text-base">
+                            {order.service.label}
+                          </p>
+                          <p className="text-xs sm:text-sm text-muted-foreground">
+                            {formatDate(order.created_at)}
+                          </p>
                         </div>
-                        <span className={cn("px-3 py-1 rounded-full text-xs font-medium", statusColors[order.status])}>
-                          {statusLabels[order.status]}
+                        <span className={cn(
+                          "px-2 sm:px-3 py-1 rounded-full text-xs font-medium flex-shrink-0",
+                          statusColors[order.status]
+                        )}>
+                          <span className="hidden sm:inline">{statusLabels[order.status]}</span>
+                          <span className="sm:hidden">{statusLabels[order.status].split(' ')[0]}</span>
                         </span>
                       </div>
                     );
@@ -318,8 +351,8 @@ export default function DashboardPage() {
               ) : (
                 <div className="p-8 text-center">
                   <Eye className="w-12 h-12 mx-auto text-muted-foreground/50 mb-3" />
-                  <p className="text-muted-foreground mb-2">Aucune commande récente</p>
-                  <Link to="/services" className="text-primary font-medium text-sm">
+                  <p className="text-muted-foreground mb-2 text-sm">Aucune commande récente</p>
+                  <Link to="/services" className="text-primary font-medium text-sm touch-manipulation">
                     Découvrir nos services →
                   </Link>
                 </div>
@@ -328,6 +361,29 @@ export default function DashboardPage() {
           )}
         </div>
       </div>
+
+      {/* Bouton WhatsApp flottant - Service Client */}
+      <button
+        onClick={openWhatsApp}
+        className="fixed bottom-24 right-4 sm:right-6 w-14 h-14 sm:w-16 sm:h-16 bg-[#25D366] hover:bg-[#20BA5A] text-white rounded-full shadow-2xl flex items-center justify-center z-50 touch-manipulation active:scale-95 transition-all group"
+        aria-label="Contacter le service client WhatsApp"
+      >
+        <FaWhatsapp className="w-7 h-7 sm:w-8 sm:h-8" />
+        
+        {/* Badge de notification (optionnel) */}
+        <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
+          <MessageCircle className="w-3 h-3 text-white" />
+        </div>
+
+        {/* Tooltip au survol (desktop uniquement) */}
+        <div className="hidden sm:block absolute right-full mr-3 bg-gray-900 text-white text-sm px-3 py-2 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+          Service Client
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-full border-4 border-transparent border-l-gray-900"></div>
+        </div>
+
+        {/* Animation de pulse */}
+        <div className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-20"></div>
+      </button>
 
       {/* Tutoriel d'onboarding */}
       {showTour && (
