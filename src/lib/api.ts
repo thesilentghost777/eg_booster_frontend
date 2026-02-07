@@ -1,6 +1,6 @@
 // API client pour EG Booster
 
-const API_BASE_URL = 'http://192.168.1.166:8000/api/egbooster';
+const API_BASE_URL = 'https://egbooster-backend.techforgesolution237/api/egbooster';
 
 class ApiClient {
   private token: string | null = null;
