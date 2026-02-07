@@ -1,0 +1,53 @@
+{
+  "name": "Eg Booster",
+  "short_name": "Eg Booster",
+  "description": "Application de boost de compte pour les réseaux sociaux : Instagram, TikTok, YouTube, Facebook et plus encore. Gagnez du temps et de la visibilité rapidement !",
+  "icons": [
+    {
+      "src": "/logo192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots_desktop-1.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Interface principale sur ordinateur"
+    },
+    {
+      "src": "/screenshots_desktop-2.png",
+      "sizes": "1280x800",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Tableau de bord statistiques"
+    },
+
+    {
+      "src": "/screenshots_mobile-1.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "label": "Écran d'accueil mobile"
+    },
+    {
+      "src": "/screenshots_mobile-2.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "label": "Page de boost en cours"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "orientation": "portrait-primary"
+}
