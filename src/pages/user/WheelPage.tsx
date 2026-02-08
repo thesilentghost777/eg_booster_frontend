@@ -109,7 +109,8 @@ export default function WheelPage() {
     );
   }
 
-  const hasParticipated = wheelEvent.status === 'en_cours' || wheelEvent.participants_count > 0;
+  // ✅ CORRECTION: Vérifier si l'utilisateur actuel a participé à cet événement
+  const hasParticipated = wheelEvent.user_has_participated || false;
 
   return (
     <div className="min-h-screen bg-background dark">
@@ -198,14 +199,14 @@ export default function WheelPage() {
             <div className="bg-muted/80 rounded-xl p-4 text-center border border-border/30">
               <div className="flex items-center justify-center gap-2 mb-1">
                 <Trophy className="w-5 h-5 text-warning" />
-                <span className="text-2xl font-bold text-foreground">{wheelEvent.total_pot + 7312}</span>
+                <span className="text-2xl font-bold text-foreground">{wheelEvent.total_pot + 432}</span>
               </div>
               <p className="text-sm text-muted-foreground">Points à gagner</p>
             </div>
             <div className="bg-muted/80 rounded-xl p-4 text-center border border-border/30">
               <div className="flex items-center justify-center gap-2 mb-1">
                 <Users className="w-5 h-5 text-secondary" />
-                <span className="text-2xl font-bold text-foreground">{wheelEvent.participants_count + 7312}</span>
+                <span className="text-2xl font-bold text-foreground">{wheelEvent.participants_count + 432}</span>
               </div>
               <p className="text-sm text-muted-foreground">Participants</p>
             </div>

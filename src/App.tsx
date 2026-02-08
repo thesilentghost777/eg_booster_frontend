@@ -1,4 +1,4 @@
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
@@ -104,9 +104,25 @@ function AppRoutes() {
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
-        <BrowserRouter>
-          <AppRoutes />
-        </BrowserRouter>
+      <BrowserRouter>
+        <AppRoutes />
+        {/* Configuration du Toaster pour notifications mobiles */}
+        <Toaster 
+          position="top-center"
+          expand={true}
+          richColors
+          closeButton
+          toastOptions={{
+            style: {
+              margin: '10px',
+              padding: '16px',
+              fontSize: '14px',
+              maxWidth: '90vw',
+            },
+            duration: 4000,
+          }}
+        />
+      </BrowserRouter>
     </AuthProvider>
   </QueryClientProvider>
 );

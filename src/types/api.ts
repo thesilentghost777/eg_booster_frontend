@@ -123,6 +123,7 @@ export interface WheelEvent {
   countdown_seconds?: number;
   winner?: { id: number; prenom: string };
   is_manual?: boolean;
+  user_has_participated: boolean; // ✅ AJOUTÉ
 }
 
 export interface WheelHistory {
