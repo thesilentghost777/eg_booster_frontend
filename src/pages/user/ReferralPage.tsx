@@ -24,7 +24,7 @@ export default function ReferralPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   const referralCode = user?.referral_code || '';
-  const shareLink = `https://egbooster.com/register?ref=${referralCode}`;
+  const shareLink = `https://egbooster.techforgesolution237.site/register?ref=${referralCode}`;
 
   useEffect(() => {
     loadReferralData();

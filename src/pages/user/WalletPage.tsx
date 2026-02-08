@@ -90,9 +90,9 @@ export default function WalletPage() {
 
   const handleDeposit = async () => {
     const amount = parseInt(depositAmount);
-    
-    if (!amount || amount < 500) {
-      toast.error('Montant minimum: 500 FCFA');
+
+    if (!amount || amount < 200) {
+      toast.error('Montant minimum: 200 FCFA');
       return;
     }
 
@@ -340,7 +340,7 @@ export default function WalletPage() {
                     <Button
                       onClick={handleDeposit}
                       className="w-full h-12 sm:h-14 gradient-primary text-white rounded-xl font-semibold text-sm sm:text-base active:scale-95 transition-transform"
-                      disabled={isDepositing || !depositAmount || !phoneNumber || parseInt(depositAmount) < 500}
+                      disabled={isDepositing || !depositAmount || !phoneNumber || parseInt(depositAmount) < 200}
                     >
                       {isDepositing ? (
                         <div className="flex items-center gap-2">

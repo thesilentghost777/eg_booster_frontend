@@ -18,7 +18,6 @@ import { api } from '@/lib/api';
 
 const menuItems = [
   { icon: Users, label: 'Parrainage', to: '/referral', badge: '' },
-  { icon: Settings, label: 'Paramètres', to: '/settings' },
   { icon: HelpCircle, label: 'Aide & Support', to: '/support' },
 ];
 
