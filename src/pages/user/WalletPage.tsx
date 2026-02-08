@@ -223,7 +223,7 @@ export default function WalletPage() {
                     Recharger
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="bg-card border-border/50 max-w-[calc(100vw-2rem)] sm:max-w-md mx-4 rounded-2xl max-h-[90vh] overflow-y-auto">
+                <DialogContent className="bg-card border-border/50 w-[calc(100%-2rem)] sm:max-w-md rounded-2xl max-h-[90vh] overflow-y-auto">
                   <DialogHeader className="pb-2">
                     <DialogTitle className="text-lg sm:text-xl font-display text-foreground">Recharger mon compte</DialogTitle>
                   </DialogHeader>
@@ -279,10 +279,12 @@ export default function WalletPage() {
                               : "border-border hover:border-muted-foreground"
                           )}
                         >
-                          <div className="w-9 h-9 sm:w-10 sm:h-10 bg-yellow-400 rounded-lg flex items-center justify-center mb-2">
-                            <div className="w-7 h-7 sm:w-8 sm:h-8 bg-yellow-500 rounded-full flex items-center justify-center">
-                              <span className="text-white font-bold text-base sm:text-lg">M</span>
-                            </div>
+                          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-lg flex items-center justify-center mb-2 bg-white/5 p-1.5">
+                            <img 
+                              src="/momo.png" 
+                              alt="MTN MoMo" 
+                              className="w-full h-full object-contain"
+                            />
                           </div>
                           <p className="font-medium text-sm sm:text-base text-foreground">MTN MoMo</p>
                           <p className="text-xs text-muted-foreground mt-0.5">Mobile Money</p>
@@ -296,8 +298,12 @@ export default function WalletPage() {
                               : "border-border hover:border-muted-foreground"
                           )}
                         >
-                          <div className="w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center mb-2">
-                            <span className="text-white font-bold text-base sm:text-lg">OM</span>
+                          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-lg flex items-center justify-center mb-2 bg-white/5 p-1.5">
+                            <img 
+                              src="/om.png" 
+                              alt="Orange Money" 
+                              className="w-full h-full object-contain"
+                            />
                           </div>
                           <p className="font-medium text-sm sm:text-base text-foreground">Orange Money</p>
                           <p className="text-xs text-muted-foreground mt-0.5">Mobile Money</p>
@@ -355,14 +361,7 @@ export default function WalletPage() {
                 </DialogContent>
               </Dialog>
 
-              <Button 
-                variant="outline" 
-                className="rounded-xl h-11 sm:h-12 border-border/50 hover:bg-muted/50 text-sm sm:text-base active:scale-95 transition-transform"
-                onClick={() => loadTransactions()}
-              >
-                <History className="w-4 h-4 sm:w-5 sm:h-5 mr-1.5 sm:mr-2" />
-                Actualiser
-              </Button>
+             
             </div>
           </div>
         </div>
@@ -370,7 +369,7 @@ export default function WalletPage() {
 
       {/* Payment Pending Dialog */}
       <Dialog open={showPaymentPending} onOpenChange={setShowPaymentPending}>
-        <DialogContent className="bg-card border-border/50 max-w-[calc(100vw-2rem)] sm:max-w-md mx-4 rounded-2xl">
+        <DialogContent className="bg-card border-border/50 w-[calc(100%-2rem)] sm:max-w-md rounded-2xl">
           <DialogHeader>
             <DialogTitle className="text-lg sm:text-xl font-display text-foreground text-center">
               Paiement en attente
@@ -404,7 +403,7 @@ export default function WalletPage() {
                     {pendingPaymentMethod === 'om' ? 'Orange Money' : 'MTN MoMo'}
                   </p>
                   <code className="text-2xl sm:text-3xl font-bold text-primary font-mono">
-                    {pendingPaymentMethod === 'om' ? '#150#' : '*126#'}
+                    {pendingPaymentMethod === 'om' ? '#150*50#' : '*126#'}
                   </code>
                   <p className="text-xs text-muted-foreground mt-2">Composez ce code</p>
                 </div>
