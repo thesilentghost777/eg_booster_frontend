@@ -79,50 +79,66 @@ export default function FreeViewsPage() {
 
   if (claimed) {
     return (
-      <div className="min-h-screen bg-background flex flex-col">
-        <div className="safe-area-top" />
+      <div className="min-h-screen bg-white">
         {/* Header */}
-        <div className="flex items-center gap-4 px-5 py-4 border-b border-border/50">
-          <button onClick={() => navigate(-1)} className="text-muted-foreground hover:text-foreground active:scale-95 transition-all p-1">
-            <ArrowLeft className="w-6 h-6" />
-          </button>
-          <h1 className="text-lg font-bold text-foreground">Vues Gratuites</h1>
+        <div className="bg-white sticky top-0 z-10 border-b border-gray-100">
+          <div className="px-4 pt-6 pb-4">
+            <div className="max-w-2xl mx-auto">
+              <div className="flex items-center gap-3">
+                <button 
+                  onClick={() => navigate(-1)} 
+                  className="w-10 h-10 -ml-2 flex items-center justify-center rounded-full active:bg-gray-50 transition-colors"
+                >
+                  <ArrowLeft className="w-5 h-5 text-gray-900" />
+                </button>
+                <h1 className="text-[22px] font-semibold text-gray-900">Vues Gratuites</h1>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div className="flex-1 flex flex-col items-center justify-center px-5 pb-safe">
-          <div className="w-20 h-20 rounded-full bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center mb-6 shadow-lg">
+        <div className="flex flex-col items-center justify-center px-4 py-16 max-w-2xl mx-auto">
+          <div className="w-20 h-20 rounded-full bg-green-600 flex items-center justify-center mb-6">
             <CheckCircle className="w-12 h-12 text-white" />
           </div>
-          <h2 className="text-2xl font-bold text-foreground mb-2">Félicitations ! 🎉</h2>
-          <p className="text-muted-foreground text-center text-sm mb-8 max-w-xs">
-            Vos 1000 vues gratuites sont en cours de livraison sur votre vidéo TikTok !
+          <h2 className="text-[28px] font-semibold text-gray-900 mb-2">Félicitations ! 🎉</h2>
+          <p className="text-gray-600 text-center text-[15px] mb-8 max-w-xs">
+            Vos 1000 vues gratuites sont en cours de livraison !
           </p>
 
-          <div className="w-full max-w-sm space-y-3 mb-8">
-            <div className="flex justify-between items-center p-4 rounded-2xl bg-card border border-border/50">
-              <span className="text-sm text-muted-foreground">Référence</span>
-              <span className="font-mono text-sm font-semibold text-foreground">{orderReference}</span>
+          <div className="w-full max-w-sm space-y-2 mb-8">
+            <div className="flex justify-between items-center p-4 rounded-2xl bg-gray-50">
+              <span className="text-[14px] text-gray-600">Référence</span>
+              <span className="font-mono text-[14px] font-semibold text-gray-900">{orderReference}</span>
             </div>
-            <div className="flex justify-between items-center p-4 rounded-2xl bg-card border border-border/50">
-              <span className="text-sm text-muted-foreground">Commande</span>
-              <span className="text-sm font-semibold text-foreground">1000 Vues TikTok</span>
+            <div className="flex justify-between items-center p-4 rounded-2xl bg-gray-50">
+              <span className="text-[14px] text-gray-600">Commande</span>
+              <span className="text-[14px] font-medium text-gray-900">1000 Vues TikTok</span>
             </div>
-            <div className="flex justify-between items-center p-4 rounded-2xl bg-card border border-border/50">
-              <span className="text-sm text-muted-foreground">Statut</span>
-              <span className="text-sm font-medium text-warning">⏳ En cours</span>
+            <div className="flex justify-between items-center p-4 rounded-2xl bg-gray-50">
+              <span className="text-[14px] text-gray-600">Statut</span>
+              <span className="text-[14px] font-medium text-yellow-600">⏳ En cours</span>
             </div>
-            <div className="flex justify-between items-center p-4 rounded-2xl bg-card border border-border/50">
-              <span className="text-sm text-muted-foreground flex items-center gap-1"><Clock className="w-4 h-4 text-warning animate-pulse" /> Livraison estimée</span>
-              <span className="text-sm font-semibold text-foreground">24-48h</span>
+            <div className="flex justify-between items-center p-4 rounded-2xl bg-gray-50">
+              <span className="text-[14px] text-gray-600 flex items-center gap-1">
+                <Clock className="w-4 h-4 text-yellow-600 animate-pulse" /> Livraison
+              </span>
+              <span className="text-[14px] font-medium text-gray-900">24-48h</span>
             </div>
           </div>
 
           <div className="w-full max-w-sm space-y-3">
-            <Button onClick={() => navigate('/dashboard')} className="w-full h-14 gradient-primary text-white font-semibold rounded-2xl active:scale-[0.97] transition-transform">
+            <Button 
+              onClick={() => navigate('/dashboard')} 
+              className="w-full h-[52px] bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-full text-[15px] active:scale-95 transition-transform"
+            >
               <Sparkles className="w-5 h-5 mr-2" />
               Aller au Dashboard
             </Button>
-            <Button onClick={() => navigate(`/orders/${orderReference}`)} variant="outline" className="w-full h-12 border-border text-foreground rounded-2xl active:scale-[0.97] transition-transform">
+            <Button 
+              onClick={() => navigate(`/orders/${orderReference}`)} 
+              className="w-full h-[48px] bg-gray-50 hover:bg-gray-100 text-gray-900 rounded-full text-[15px] active:scale-95 transition-transform"
+            >
               Voir ma commande
             </Button>
           </div>
@@ -132,56 +148,65 @@ export default function FreeViewsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <div className="safe-area-top" />
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <div className="flex items-center gap-4 px-5 py-4 border-b border-border/50">
-        <button onClick={() => navigate(-1)} className="text-muted-foreground hover:text-foreground active:scale-95 transition-all p-1">
-          <ArrowLeft className="w-6 h-6" />
-        </button>
-        <h1 className="text-lg font-bold text-foreground">Vues Gratuites</h1>
-      </div>
-
-      {/* Timer */}
-      <div className="px-5 pt-5">
-        <div className="flex items-center justify-center gap-2 mb-5">
-          <Clock className="w-4 h-4 text-warning animate-pulse" />
-          <span className="text-sm text-muted-foreground">Offre expire dans</span>
-        </div>
-        <div className="flex items-center justify-center gap-2 mb-6">
-          {[formatTime(hours), formatTime(minutes), formatTime(seconds)].map((val, i) => (
-            <React.Fragment key={i}>
-              {i > 0 && <span className="text-2xl font-bold text-foreground">:</span>}
-              <div className="bg-card border border-border/50 rounded-xl px-4 py-3 min-w-[60px] text-center shadow-sm">
-                <span className="text-2xl font-bold text-foreground font-mono">{val}</span>
-              </div>
-            </React.Fragment>
-          ))}
+      <div className="bg-white sticky top-0 z-10 border-b border-gray-100">
+        <div className="px-4 pt-6 pb-4">
+          <div className="max-w-2xl mx-auto">
+            <div className="flex items-center gap-3">
+              <button 
+                onClick={() => navigate(-1)} 
+                className="w-10 h-10 -ml-2 flex items-center justify-center rounded-full active:bg-gray-50 transition-colors"
+              >
+                <ArrowLeft className="w-5 h-5 text-gray-900" />
+              </button>
+              <h1 className="text-[22px] font-semibold text-gray-900">Vues Gratuites</h1>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="flex-1 px-5 pb-safe">
+      {/* Content */}
+      <div className="px-4 py-6 max-w-2xl mx-auto space-y-6 pb-24">
+        
+        {/* Timer */}
+        <div>
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <Clock className="w-4 h-4 text-yellow-600 animate-pulse" />
+            <span className="text-[14px] text-gray-600">Offre expire dans</span>
+          </div>
+          <div className="flex items-center justify-center gap-2">
+            {[formatTime(hours), formatTime(minutes), formatTime(seconds)].map((val, i) => (
+              <React.Fragment key={i}>
+                {i > 0 && <span className="text-[24px] font-semibold text-gray-900">:</span>}
+                <div className="bg-gray-50 rounded-2xl px-4 py-3 min-w-[60px] text-center">
+                  <span className="text-[24px] font-semibold text-gray-900 font-mono">{val}</span>
+                </div>
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
+
         {/* Gift Card */}
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 p-6 text-center mb-6 shadow-lg">
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-yellow-400 to-orange-500 p-8 text-center">
           <div className="w-16 h-16 mx-auto rounded-2xl bg-white/20 flex items-center justify-center mb-3">
             <Gift className="w-10 h-10 text-white" />
           </div>
-          <p className="text-white/80 text-sm">Cadeau de bienvenue</p>
-          <p className="text-4xl font-black text-white mt-1">1000 VUES</p>
-          <p className="text-white font-semibold mt-1">100% GRATUITES ! 🎁</p>
+          <p className="text-white/90 text-[14px]">Cadeau de bienvenue</p>
+          <p className="text-[40px] font-bold text-white mt-1">1000 VUES</p>
+          <p className="text-white font-semibold mt-1 text-[15px]">100% GRATUITES ! 🎁</p>
           <div className="absolute -top-6 -right-6 w-20 h-20 rounded-full bg-white/10" />
         </div>
 
-        <form onSubmit={handleClaim} className="space-y-5">
+        <form onSubmit={handleClaim} className="space-y-6">
           {/* Link Input */}
           <div>
-            <div className="flex items-center gap-2 mb-2">
-              <Eye className="w-5 h-5 text-primary" />
-              <span className="text-sm font-semibold text-foreground">Réclamez vos vues gratuites</span>
+            <div className="flex items-center gap-2 mb-3">
+              <Eye className="w-5 h-5 text-gray-500" />
+              <span className="text-[15px] font-medium text-gray-900">Réclamez vos vues</span>
             </div>
-            <label className="text-sm font-medium text-foreground mb-1.5 block">
-              Lien de votre vidéo TikTok <span className="text-destructive">*</span>
+            <label className="text-[14px] font-medium text-gray-900 mb-2 block">
+              Lien de votre vidéo TikTok <span className="text-red-600">*</span>
             </label>
             <Input
               type="url"
@@ -189,24 +214,24 @@ export default function FreeViewsPage() {
               value={videoLink}
               onChange={(e) => setVideoLink(e.target.value)}
               disabled={isLoading}
-              className="h-12 bg-muted/80 border border-border/50 rounded-xl text-foreground placeholder:text-muted-foreground/60"
+              className="h-12 bg-gray-50 border-0 rounded-2xl text-gray-900 placeholder:text-gray-400 text-[15px]"
             />
-            <p className="text-xs text-muted-foreground mt-1.5">Collez le lien complet de votre vidéo TikTok</p>
+            <p className="text-[13px] text-gray-500 mt-2">Collez le lien complet de votre vidéo</p>
           </div>
 
           {/* How it works */}
           <div className="space-y-3">
-            <p className="text-sm font-semibold text-foreground">Comment ça marche ?</p>
+            <p className="text-[15px] font-medium text-gray-900">Comment ça marche ?</p>
             {[
               'Copiez le lien de votre vidéo TikTok',
               'Collez-le dans le champ ci-dessus',
               'Recevez 1000 vues en 24-48h !',
             ].map((step, i) => (
               <div key={i} className="flex items-center gap-3">
-                <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <span className="text-xs font-bold text-primary">{i + 1}</span>
+                <div className="w-7 h-7 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
+                  <span className="text-[13px] font-semibold text-blue-600">{i + 1}</span>
                 </div>
-                <span className="text-sm text-muted-foreground">{step}</span>
+                <span className="text-[15px] text-gray-600">{step}</span>
               </div>
             ))}
           </div>
@@ -215,12 +240,12 @@ export default function FreeViewsPage() {
           <Button
             type="submit"
             disabled={isLoading || !videoLink.trim()}
-            className="w-full h-14 gradient-primary text-white font-semibold rounded-2xl active:scale-[0.97] transition-transform disabled:opacity-50"
+            className="w-full h-[52px] bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-full text-[15px] active:scale-95 transition-transform disabled:opacity-50"
           >
             {isLoading ? (
               <>
                 <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                Traitement en cours...
+                Traitement...
               </>
             ) : (
               <>
@@ -230,7 +255,7 @@ export default function FreeViewsPage() {
             )}
           </Button>
 
-          <p className="text-xs text-muted-foreground text-center">
+          <p className="text-[13px] text-gray-400 text-center">
             Offre limitée à 1 fois par utilisateur
           </p>
         </form>

@@ -49,7 +49,6 @@ export default function TransferPage() {
       const response = await api.findRecipient(recipientPhone);
       const data = (response as { data: { recipient_name: string; id: number; telephone: string } }).data;
       
-      // CORRECTION: Stocker les bonnes données
       setRecipientName(data.recipient_name);
       setRecipientId(data.id);
       
@@ -103,87 +102,88 @@ export default function TransferPage() {
   const quickAmounts = [100, 500, 1000, 2000];
 
   return (
-    <div className="min-h-screen bg-background dark">
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <div className="gradient-dark px-4 pt-6 pb-8">
-        <div className="max-w-lg mx-auto">
-          <div className="flex items-center gap-3 mb-6">
-            <button onClick={() => navigate(-1)} className="text-muted-foreground hover:text-foreground transition-colors">
-              <ArrowLeft className="w-6 h-6" />
-            </button>
-            <h1 className="text-xl font-display font-bold text-foreground">Transférer des points</h1>
-          </div>
-
-          {/* Balance card */}
-          <div className="bg-card/90 backdrop-blur-xl rounded-2xl p-4 border border-border/50">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 gradient-secondary rounded-xl flex items-center justify-center">
-                <Coins className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Votre solde</p>
-                <p className="text-2xl font-bold text-foreground">{user?.points_balance?.toLocaleString() || 0} <span className="text-sm text-muted-foreground">pts</span></p>
-              </div>
-            </div>
-          </div>
+      <div className="sticky top-0 z-10 bg-white border-b border-gray-100">
+        <div className="flex items-center gap-3 px-4 py-3 max-w-2xl mx-auto">
+          <button 
+            onClick={() => navigate(-1)} 
+            className="p-2 -ml-2 hover:bg-gray-50 rounded-full transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5 text-gray-900" />
+          </button>
+          <h1 className="text-xl font-semibold text-gray-900">Transférer des points</h1>
         </div>
       </div>
 
-      <div className="px-4 max-w-lg mx-auto pb-24 -mt-2">
+      <div className="max-w-2xl mx-auto px-4 py-6 space-y-6">
+        {/* Balance card */}
+        <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
+              <Coins className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <p className="text-sm text-gray-600">Votre solde</p>
+              <p className="text-2xl font-semibold text-gray-900">{user?.points_balance?.toLocaleString() || 0} <span className="text-sm text-gray-500">pts</span></p>
+            </div>
+          </div>
+        </div>
+
         {/* Transfer form */}
-        <form onSubmit={handleSubmit} className="bg-card rounded-2xl border border-border p-6 space-y-6">
-          <h3 className="font-semibold text-lg text-foreground flex items-center gap-2">
-            <ArrowRightLeft className="w-5 h-5 text-primary" />
+        <form onSubmit={handleSubmit} className="bg-white border border-gray-200 rounded-2xl p-6 space-y-6">
+          <h3 className="font-semibold text-lg text-gray-900 flex items-center gap-2">
+            <ArrowRightLeft className="w-5 h-5 text-blue-600" />
             Nouveau transfert
           </h3>
 
           {/* Recipient */}
-<div className="space-y-3">
-  <Label htmlFor="recipient" className="text-sm font-semibold text-foreground">
-    Numéro du destinataire <span className="text-primary">*</span>
-  </Label>
-  <div className="flex gap-2">
-    <Input
-      id="recipient"
-      type="tel"
-      placeholder="699000001"
-      value={recipientPhone}
-      onChange={(e) => {
-        setRecipientPhone(e.target.value);
-        setRecipientName(null);
-        setRecipientId(null);
-      }}
-      className="h-12 bg-muted/80 border border-border/50 rounded-xl text-foreground placeholder:text-muted-foreground/60"
-    />
-    <Button 
-      type="button"
-      variant="outline"
-      className="h-12 px-4 border-border hover:bg-accent"
-      onClick={handleSearchRecipient}
-      disabled={isSearching || recipientPhone.length < 9}
-    >
-      {isSearching ? (
-        <div className="w-5 h-5 border-2 border-muted-foreground/30 border-t-foreground rounded-full animate-spin" />
-      ) : (
-        <Search className="w-5 h-5 text-foreground" />
-      )}
-    </Button>
-  </div>
-  {recipientName && (
-    <div className="flex items-center gap-2 p-3 bg-success/10 border border-success/30 rounded-xl">
-      <CheckCircle className="w-5 h-5 text-success" />
-      <div>
-        <p className="text-sm font-medium text-success">Destinataire trouvé</p>
-        <p className="text-sm text-foreground">{recipientName}</p>
-      </div>
-    </div>
-  )}
-</div>
+          <div className="space-y-3">
+            <Label htmlFor="recipient" className="text-sm font-medium text-gray-900">
+              Numéro du destinataire <span className="text-red-600">*</span>
+            </Label>
+            <div className="flex gap-2">
+              <Input
+                id="recipient"
+                type="tel"
+                placeholder="699000001"
+                value={recipientPhone}
+                onChange={(e) => {
+                  setRecipientPhone(e.target.value);
+                  setRecipientName(null);
+                  setRecipientId(null);
+                }}
+                className="h-11 bg-gray-50 border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-400 focus:bg-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              />
+              <Button 
+                type="button"
+                variant="outline"
+                className="h-11 px-4 bg-gray-50 border-gray-200 hover:bg-gray-100 rounded-xl"
+                onClick={handleSearchRecipient}
+                disabled={isSearching || recipientPhone.length < 9}
+              >
+                {isSearching ? (
+                  <div className="w-5 h-5 border-2 border-gray-300 border-t-gray-900 rounded-full animate-spin" />
+                ) : (
+                  <Search className="w-5 h-5 text-gray-900" />
+                )}
+              </Button>
+            </div>
+            {recipientName && (
+              <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-xl">
+                <CheckCircle className="w-5 h-5 text-green-600" />
+                <div>
+                  <p className="text-sm font-medium text-green-900">Destinataire trouvé</p>
+                  <p className="text-sm text-gray-900">{recipientName}</p>
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Amount */}
           <div className="space-y-3">
-            <Label htmlFor="amount" className="text-sm font-semibold text-foreground">
-              Montant à transférer <span className="text-primary">*</span>
+            <Label htmlFor="amount" className="text-sm font-medium text-gray-900">
+              Montant à transférer <span className="text-red-600">*</span>
             </Label>
             <Input
               id="amount"
@@ -191,22 +191,22 @@ export default function TransferPage() {
               placeholder="1000"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              className="h-14 bg-muted/80 border border-border/50 rounded-xl text-foreground text-xl font-bold text-center placeholder:text-muted-foreground/60"
+              className="h-14 bg-gray-50 border-gray-200 rounded-xl text-gray-900 text-xl font-semibold text-center placeholder:text-gray-400 focus:bg-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             />
-            <p className="text-xs text-muted-foreground text-center">Minimum: 100 points</p>
+            <p className="text-xs text-gray-500 text-center">Minimum: 100 points</p>
 
             {/* Quick amounts */}
-            <div className="flex gap-2 flex-wrap">
+            <div className="grid grid-cols-4 gap-2">
               {quickAmounts.map((amt) => (
                 <button
                   key={amt}
                   type="button"
                   onClick={() => setAmount(amt.toString())}
                   className={cn(
-                    "px-4 py-2 rounded-xl font-medium transition-all flex-1",
+                    "px-4 py-2 rounded-xl font-medium transition-colors",
                     amount === amt.toString()
-                      ? "gradient-primary text-white"
-                      : "bg-muted text-foreground hover:bg-muted/80"
+                      ? "bg-blue-600 text-white"
+                      : "bg-gray-100 text-gray-900 hover:bg-gray-200"
                   )}
                 >
                   {amt}
@@ -217,9 +217,9 @@ export default function TransferPage() {
 
           {/* Balance warning */}
           {amount && !hasEnoughPoints && (
-            <div className="flex items-center gap-3 p-4 bg-destructive/10 border border-destructive/30 rounded-xl">
-              <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0" />
-              <p className="text-sm text-destructive">
+            <div className="flex items-center gap-3 p-4 bg-red-50 border border-red-200 rounded-xl">
+              <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0" />
+              <p className="text-sm text-red-900">
                 Solde insuffisant. Il vous manque {numericAmount - (user?.points_balance || 0)} points.
               </p>
             </div>
@@ -227,19 +227,19 @@ export default function TransferPage() {
 
           {/* Summary */}
           {recipientName && amount && (
-            <div className="bg-muted/50 rounded-xl p-4 space-y-2">
+            <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 space-y-2">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-muted-foreground">Destinataire</span>
-                <span className="text-foreground">{recipientName}</span>
+                <span className="text-gray-600">Destinataire</span>
+                <span className="text-gray-900 font-medium">{recipientName}</span>
               </div>
               <div className="flex items-center justify-between text-sm">
-                <span className="text-muted-foreground">Montant</span>
-                <span className="text-foreground">{numericAmount.toLocaleString()} points</span>
+                <span className="text-gray-600">Montant</span>
+                <span className="text-gray-900 font-medium">{numericAmount.toLocaleString()} points</span>
               </div>
-              <div className="h-px bg-border my-2" />
+              <div className="h-px bg-gray-200 my-2" />
               <div className="flex items-center justify-between text-sm">
-                <span className="text-muted-foreground">Nouveau solde</span>
-                <span className={cn("font-medium", hasEnoughPoints ? "text-foreground" : "text-destructive")}>
+                <span className="text-gray-600">Nouveau solde</span>
+                <span className={cn("font-semibold", hasEnoughPoints ? "text-gray-900" : "text-red-600")}>
                   {((user?.points_balance || 0) - numericAmount).toLocaleString()} points
                 </span>
               </div>
@@ -249,7 +249,7 @@ export default function TransferPage() {
           <Button
             type="submit"
             disabled={isLoading || !hasEnoughPoints || !isValidAmount || !recipientName}
-            className="w-full h-14 gradient-primary text-white font-bold text-lg rounded-xl shadow-glow hover:opacity-90 transition-all disabled:opacity-50"
+            className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? (
               <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -264,11 +264,11 @@ export default function TransferPage() {
 
         {/* Recent transfers */}
         {recentTransfers.length > 0 && (
-          <div className="bg-card rounded-2xl border border-border overflow-hidden mt-6">
-            <div className="p-4 border-b border-border">
-              <h3 className="font-semibold text-foreground">Transferts récents</h3>
+          <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
+            <div className="p-4 border-b border-gray-100">
+              <h3 className="font-semibold text-gray-900">Transferts récents</h3>
             </div>
-            <div className="divide-y divide-border">
+            <div className="divide-y divide-gray-100">
               {recentTransfers.slice(0, 5).map((transfer) => (
                 <button
                   key={transfer.reference}
@@ -276,30 +276,29 @@ export default function TransferPage() {
                   onClick={() => {
                     if (transfer.direction === 'envoyé') {
                       setRecipientPhone(transfer.contact);
-                      // Réinitialiser le nom pour forcer une nouvelle recherche
                       setRecipientName(null);
                       setRecipientId(null);
                     }
                   }}
-                  className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors"
+                  className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-muted rounded-full flex items-center justify-center">
-                      <User className="w-5 h-5 text-muted-foreground" />
+                    <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+                      <User className="w-5 h-5 text-gray-600" />
                     </div>
                     <div className="text-left">
-                      <p className="font-medium text-foreground">{transfer.contact}</p>
-                      <p className="text-xs text-muted-foreground">{transfer.direction}</p>
+                      <p className="font-medium text-gray-900">{transfer.contact}</p>
+                      <p className="text-xs text-gray-500">{transfer.direction}</p>
                     </div>
                   </div>
                   <div className="text-right">
                     <p className={cn(
                       "font-medium",
-                      transfer.direction === 'envoyé' ? "text-destructive" : "text-success"
+                      transfer.direction === 'envoyé' ? "text-red-600" : "text-green-600"
                     )}>
                       {transfer.direction === 'envoyé' ? '-' : '+'}{transfer.points} pts
                     </p>
-                    <p className="text-xs text-muted-foreground">{transfer.date}</p>
+                    <p className="text-xs text-gray-500">{transfer.date}</p>
                   </div>
                 </button>
               ))}

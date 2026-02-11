@@ -15,8 +15,8 @@ export function BottomNav() {
   const location = useLocation();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-xl border-t border-border safe-area-bottom">
-      <div className="flex items-center justify-around py-2 px-4 max-w-lg mx-auto">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-100 safe-area-bottom">
+      <div className="flex items-center justify-around py-1 px-2 max-w-lg mx-auto">
         {navItems.map((item) => {
           const isActive = location.pathname === item.to || 
             (item.to !== '/dashboard' && location.pathname.startsWith(item.to));
@@ -25,23 +25,29 @@ export function BottomNav() {
             <NavLink
               key={item.to}
               to={item.to}
-              className={cn(
-                "flex flex-col items-center gap-1 py-2 px-3 rounded-xl transition-all duration-200",
-                isActive 
-                  ? "text-primary" 
-                  : "text-muted-foreground hover:text-foreground"
-              )}
+              className="flex flex-col items-center gap-1 py-2 px-3 rounded-xl transition-colors min-w-0"
             >
               <div className={cn(
-                "p-2 rounded-xl transition-all duration-200",
-                isActive && "gradient-primary shadow-glow"
+                "p-2 rounded-xl transition-all",
+                isActive 
+                  ? "bg-blue-600" 
+                  : "bg-transparent"
               )}>
                 <item.icon className={cn(
-                  "w-5 h-5 transition-all",
-                  isActive && "text-white"
+                  "w-5 h-5 transition-colors",
+                  isActive 
+                    ? "text-white" 
+                    : "text-gray-400"
                 )} />
               </div>
-              <span className="text-xs font-medium">{item.label}</span>
+              <span className={cn(
+                "text-xs font-medium transition-colors",
+                isActive 
+                  ? "text-gray-900" 
+                  : "text-gray-500"
+              )}>
+                {item.label}
+              </span>
             </NavLink>
           );
         })}

@@ -31,9 +31,7 @@ export default function WalletPage() {
   useEffect(() => {
     loadTransactions();
     
-    // Préfixer avec 237 si l'utilisateur a un numéro
     if (user?.telephone && !phoneNumber) {
-      // Nettoyer le numéro et ajouter 237 si nécessaire
       const cleanNumber = user.telephone.replace(/\D/g, '');
       if (cleanNumber.length === 9) {
         setPhoneNumber('237' + cleanNumber);
@@ -42,7 +40,6 @@ export default function WalletPage() {
       }
     }
 
-    // Cleanup polling on unmount
     return () => {
       if (pollingInterval) {
         clearInterval(pollingInterval);
@@ -63,12 +60,10 @@ export default function WalletPage() {
   };
 
   const startPolling = (externalId: string) => {
-    // Vérifier immédiatement
     checkPaymentStatus(externalId);
     
-    // Puis vérifier toutes les 5 secondes pendant 2 minutes max
     let attempts = 0;
-    const maxAttempts = 24; // 24 * 5s = 2 minutes
+    const maxAttempts = 24;
     
     const interval = setInterval(() => {
       attempts++;
@@ -107,14 +102,9 @@ export default function WalletPage() {
       const response = await api.deposit(amount, paymentMethod, cleanPhone);
 
       if ((response as { success?: boolean }).success) {
-        // Sauvegarder la méthode de paiement utilisée
         setPendingPaymentMethod(paymentMethod);
-        
-        // Fermer le dialogue de dépôt
         setDialogOpen(false);
         setDepositAmount('');
-        
-        // Afficher le menu de paiement en attente
         setShowPaymentPending(true);
         
         const resp = response as { data?: { external_id?: string } };
@@ -161,7 +151,6 @@ export default function WalletPage() {
   };
 
   const formatPhoneNumber = (value: string) => {
-    // Nettoyer la valeur et limiter à 12 caractères (237 + 9 chiffres)
     const cleaned = value.replace(/\D/g, '');
     return cleaned.slice(0, 12);
   };
@@ -184,291 +173,216 @@ export default function WalletPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background dark">
-      {/* Header avec safe area pour iPhone */}
-      <div className="gradient-dark px-4 pt-safe pb-20">
-        <div className="max-w-lg mx-auto">
-          {/* Header sticky pour meilleure navigation */}
-          <div className="flex items-center gap-3 mb-6 pt-4">
-            <button 
-              onClick={() => navigate(-1)} 
-              className="text-muted-foreground hover:text-foreground transition-colors active:scale-95 p-2 -ml-2 rounded-xl hover:bg-white/5"
-              aria-label="Retour"
-            >
-              <ArrowLeft className="w-6 h-6" />
-            </button>
-            <h1 className="text-xl font-display font-bold text-foreground">Mon Portefeuille</h1>
-          </div>
-
-          {/* Balance card - Optimisé pour mobile */}
-          <div className="bg-card/90 backdrop-blur-xl rounded-3xl p-5 sm:p-6 border border-border/50 shadow-2xl">
-            <div className="flex items-start sm:items-center gap-4 mb-6">
-              <div className="w-14 h-14 sm:w-16 sm:h-16 gradient-secondary rounded-2xl flex items-center justify-center shadow-glow shrink-0">
-                <Wallet className="w-7 h-7 sm:w-8 sm:h-8 text-white" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-xs sm:text-sm text-muted-foreground font-medium mb-1">Solde disponible</p>
-                <p className="text-3xl sm:text-4xl font-display font-bold text-foreground tracking-tight leading-none">
-                  {user?.points_balance?.toLocaleString() || 0}
-                </p>
-                <p className="text-xs sm:text-sm text-muted-foreground mt-1">≈ {user?.points_balance?.toLocaleString() || 0} FCFA</p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-2 sm:gap-3">
-              <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button className="gradient-primary text-white rounded-xl h-11 sm:h-12 text-sm sm:text-base font-semibold active:scale-95 transition-transform">
-                    <Plus className="w-4 h-4 sm:w-5 sm:h-5 mr-1.5 sm:mr-2" />
-                    Recharger
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="bg-card border-border/50 w-[calc(100%-2rem)] sm:max-w-md rounded-2xl max-h-[90vh] overflow-y-auto">
-                  <DialogHeader className="pb-2">
-                    <DialogTitle className="text-lg sm:text-xl font-display text-foreground">Recharger mon compte</DialogTitle>
-                  </DialogHeader>
-                  
-                  <div className="space-y-4 mt-2">
-                    {/* Montants rapides */}
-                    <div>
-                      <Label className="text-sm font-semibold text-foreground mb-2 block">Montant rapide</Label>
-                      <div className="grid grid-cols-3 gap-2">
-                        {depositAmounts.map(amount => (
-                          <button
-                            key={amount}
-                            onClick={() => setDepositAmount(amount.toString())}
-                            className={cn(
-                              "py-2.5 sm:py-3 rounded-xl font-medium transition-all text-sm sm:text-base active:scale-95",
-                              depositAmount === amount.toString()
-                                ? "gradient-primary text-white shadow-glow"
-                                : "bg-muted text-foreground hover:bg-muted/80"
-                            )}
-                          >
-                            {amount.toLocaleString()}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Montant personnalisé */}
-                    <div>
-                      <Label className="text-sm font-semibold text-foreground">Montant personnalisé (FCFA)</Label>
-                      <Input
-                        type="number"
-                        inputMode="numeric"
-                        placeholder="Entrez le montant"
-                        value={depositAmount}
-                        onChange={(e) => setDepositAmount(e.target.value)}
-                        className="h-12 mt-2 bg-muted/80 border border-border/50 text-foreground placeholder:text-muted-foreground/60 text-base"
-                      />
-                      <p className="text-xs text-muted-foreground mt-1.5">
-                        Minimum: 500 FCFA
-                      </p>
-                    </div>
-
-                    {/* Mode de paiement */}
-                    <div>
-                      <Label className="text-sm font-semibold text-foreground mb-2 block">Mode de paiement</Label>
-                      <div className="grid grid-cols-2 gap-2 sm:gap-3">
-                        <button
-                          onClick={() => setPaymentMethod('momo')}
-                          className={cn(
-                            "p-3 sm:p-4 rounded-xl border-2 transition-all text-left active:scale-95",
-                            paymentMethod === 'momo'
-                              ? "border-primary bg-primary/10"
-                              : "border-border hover:border-muted-foreground"
-                          )}
-                        >
-                          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-lg flex items-center justify-center mb-2 bg-white/5 p-1.5">
-                            <img 
-                              src="/momo.png" 
-                              alt="MTN MoMo" 
-                              className="w-full h-full object-contain"
-                            />
-                          </div>
-                          <p className="font-medium text-sm sm:text-base text-foreground">MTN MoMo</p>
-                          <p className="text-xs text-muted-foreground mt-0.5">Mobile Money</p>
-                        </button>
-                        <button
-                          onClick={() => setPaymentMethod('om')}
-                          className={cn(
-                            "p-3 sm:p-4 rounded-xl border-2 transition-all text-left active:scale-95",
-                            paymentMethod === 'om'
-                              ? "border-primary bg-primary/10"
-                              : "border-border hover:border-muted-foreground"
-                          )}
-                        >
-                          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-lg flex items-center justify-center mb-2 bg-white/5 p-1.5">
-                            <img 
-                              src="/om.png" 
-                              alt="Orange Money" 
-                              className="w-full h-full object-contain"
-                            />
-                          </div>
-                          <p className="font-medium text-sm sm:text-base text-foreground">Orange Money</p>
-                          <p className="text-xs text-muted-foreground mt-0.5">Mobile Money</p>
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Numéro de téléphone */}
-                    <div>
-                      <Label className="text-sm font-semibold text-foreground">Numéro de téléphone</Label>
-                      <div className="relative mt-2">
-                        <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
-                        <Input
-                          type="tel"
-                          inputMode="tel"
-                          placeholder="237XXXXXXXXX"
-                          value={phoneNumber}
-                          onChange={handlePhoneInput}
-                          className="h-12 pl-11 bg-muted/80 border border-border/50 text-foreground placeholder:text-muted-foreground/60 font-mono text-base"
-                          maxLength={12}
-                        />
-                      </div>
-                      <p className="text-xs text-muted-foreground mt-1.5">
-                        Format: 237 suivi de 9 chiffres (ex: 237690123456)
-                      </p>
-                    </div>
-
-                    {/* Info box */}
-                    <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-3 sm:p-4">
-                      <p className="text-sm font-medium text-blue-400 mb-2">ℹ️ Comment ça marche ?</p>
-                      <ol className="text-xs text-muted-foreground space-y-1 list-decimal list-inside">
-                        <li>Entrez le montant et votre numéro</li>
-                        <li>Cliquez sur "Confirmer le dépôt"</li>
-                        <li>Validez la notification sur votre téléphone</li>
-                        <li>Votre compte sera crédité automatiquement</li>
-                      </ol>
-                    </div>
-
-                    {/* Button de confirmation */}
-                    <Button
-                      onClick={handleDeposit}
-                      className="w-full h-12 sm:h-14 gradient-primary text-white rounded-xl font-semibold text-sm sm:text-base active:scale-95 transition-transform"
-                      disabled={isDepositing || !depositAmount || !phoneNumber || parseInt(depositAmount) < 200}
-                    >
-                      {isDepositing ? (
-                        <div className="flex items-center gap-2">
-                          <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                          <span>Initialisation...</span>
-                        </div>
-                      ) : (
-                        `Confirmer ${depositAmount ? parseInt(depositAmount).toLocaleString() : 0} FCFA`
-                      )}
-                    </Button>
-                  </div>
-                </DialogContent>
-              </Dialog>
-
-             
+    <div className="min-h-screen bg-white">
+      {/* Header */}
+      <div className="bg-white sticky top-0 z-10 border-b border-gray-100">
+        <div className="px-4 pt-6 pb-4">
+          <div className="max-w-2xl mx-auto">
+            <div className="flex items-center gap-3">
+              <button 
+                onClick={() => navigate(-1)} 
+                className="w-10 h-10 -ml-2 flex items-center justify-center rounded-full active:bg-gray-50 transition-colors"
+              >
+                <ArrowLeft className="w-5 h-5 text-gray-900" />
+              </button>
+              <h1 className="text-[22px] font-semibold text-gray-900">Portefeuille</h1>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Payment Pending Dialog */}
-      <Dialog open={showPaymentPending} onOpenChange={setShowPaymentPending}>
-        <DialogContent className="bg-card border-border/50 w-[calc(100%-2rem)] sm:max-w-md rounded-2xl">
-          <DialogHeader>
-            <DialogTitle className="text-lg sm:text-xl font-display text-foreground text-center">
-              Paiement en attente
-            </DialogTitle>
-          </DialogHeader>
-          
-          <div className="space-y-5 sm:space-y-6 py-4">
-            {/* Loading animation */}
-            <div className="flex justify-center">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
-            </div>
-
-            {/* Instructions */}
-            <div className="text-center space-y-2 sm:space-y-3 px-2">
-              <p className="text-base sm:text-lg font-semibold text-foreground">
-                Validez le paiement sur votre téléphone
-              </p>
-              <p className="text-sm text-muted-foreground">
-                Une notification a été envoyée au <span className="font-mono font-medium text-foreground block sm:inline mt-1 sm:mt-0">{phoneNumber}</span>
-              </p>
-            </div>
-
-            {/* USSD code */}
-            <div className="bg-muted/50 border border-border rounded-xl p-3 sm:p-4 space-y-3">
-              <p className="text-xs sm:text-sm font-medium text-foreground text-center">
-                Si la fenêtre ne s'ouvre pas automatiquement :
-              </p>
-              <div className="flex items-center justify-center bg-card rounded-lg p-4 border border-border">
-                <div className="text-center">
-                  <p className="text-xs sm:text-sm text-muted-foreground mb-2">
-                    {pendingPaymentMethod === 'om' ? 'Orange Money' : 'MTN MoMo'}
-                  </p>
-                  <code className="text-2xl sm:text-3xl font-bold text-primary font-mono">
-                    {pendingPaymentMethod === 'om' ? '#150*50#' : '*126#'}
-                  </code>
-                  <p className="text-xs text-muted-foreground mt-2">Composez ce code</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Status message */}
-            <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-3">
-              <p className="text-xs text-center text-muted-foreground leading-relaxed">
-                La vérification du paiement se fait automatiquement. Cette fenêtre se fermera dès confirmation.
-              </p>
-            </div>
-
-            {/* Cancel button */}
-            <Button
-              variant="outline"
-              className="w-full h-11 sm:h-12 active:scale-95 transition-transform"
-              onClick={() => setShowPaymentPending(false)}
-            >
-              Fermer
-            </Button>
+      {/* Content */}
+      <div className="px-4 py-6 max-w-2xl mx-auto space-y-6 pb-24">
+        
+        {/* Balance card */}
+        <div className="pt-2 pb-6">
+          <div className="text-[15px] text-gray-500 mb-3">Solde disponible</div>
+          <div className="text-[56px] font-semibold text-gray-900 leading-none mb-1 tracking-tight">
+            {user?.points_balance?.toLocaleString() || 0}
           </div>
-        </DialogContent>
-      </Dialog>
+          <div className="text-[15px] text-gray-500 mb-8">
+            ≈ {user?.points_balance?.toLocaleString() || 0} FCFA
+          </div>
+          
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <DialogTrigger asChild>
+              <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white h-[52px] rounded-full text-[15px] font-medium">
+                <Plus className="w-5 h-5 mr-2" />
+                Recharger
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="bg-white border-gray-100 w-[calc(100%-2rem)] sm:max-w-md rounded-3xl max-h-[90vh] overflow-y-auto">
+              <DialogHeader className="pb-2">
+                <DialogTitle className="text-[20px] font-semibold text-gray-900">Recharger</DialogTitle>
+              </DialogHeader>
+              
+              <div className="space-y-5 mt-2">
+                {/* Montants rapides */}
+                <div>
+                  <Label className="text-[14px] font-medium text-gray-900 mb-3 block">Montant</Label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {depositAmounts.map(amount => (
+                      <button
+                        key={amount}
+                        onClick={() => setDepositAmount(amount.toString())}
+                        className={cn(
+                          "py-3 rounded-2xl font-medium transition-all text-[15px] active:scale-95",
+                          depositAmount === amount.toString()
+                            ? "bg-blue-600 text-white"
+                            : "bg-gray-50 text-gray-900 active:bg-gray-100"
+                        )}
+                      >
+                        {amount.toLocaleString()}
+                      </button>
+                    ))}
+                  </div>
+                </div>
 
-      {/* Transactions - Optimisé pour mobile */}
-      <div className="px-4 -mt-8 max-w-lg mx-auto pb-safe pb-24">
-        <div className="bg-card rounded-2xl border border-border overflow-hidden shadow-xl">
-          <div className="flex items-center gap-2 p-4 border-b border-border bg-card/50 sticky top-0 z-10 backdrop-blur-sm">
-            <History className="w-5 h-5 text-muted-foreground" />
-            <h2 className="font-semibold text-foreground text-sm sm:text-base">Historique des transactions</h2>
+                {/* Montant personnalisé */}
+                <div>
+                  <Label className="text-[14px] font-medium text-gray-900">Montant personnalisé</Label>
+                  <Input
+                    type="number"
+                    inputMode="numeric"
+                    placeholder="Entrez le montant"
+                    value={depositAmount}
+                    onChange={(e) => setDepositAmount(e.target.value)}
+                    className="h-12 mt-2 bg-gray-50 border-0 text-gray-900 placeholder:text-gray-400 text-[15px] rounded-2xl"
+                  />
+                  <p className="text-[13px] text-gray-500 mt-2">Minimum: 500 FCFA</p>
+                </div>
+
+                {/* Mode de paiement */}
+                <div>
+                  <Label className="text-[14px] font-medium text-gray-900 mb-3 block">Mode de paiement</Label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      onClick={() => setPaymentMethod('momo')}
+                      className={cn(
+                        "p-4 rounded-2xl border-2 transition-all text-left active:scale-95",
+                        paymentMethod === 'momo'
+                          ? "border-blue-600 bg-blue-50"
+                          : "border-gray-100 active:bg-gray-50"
+                      )}
+                    >
+                      <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-2 bg-white">
+                        <img 
+                          src="/momo.png" 
+                          alt="MTN MoMo" 
+                          className="w-full h-full object-contain p-1"
+                        />
+                      </div>
+                      <p className="font-medium text-[14px] text-gray-900">MTN MoMo</p>
+                    </button>
+                    <button
+                      onClick={() => setPaymentMethod('om')}
+                      className={cn(
+                        "p-4 rounded-2xl border-2 transition-all text-left active:scale-95",
+                        paymentMethod === 'om'
+                          ? "border-blue-600 bg-blue-50"
+                          : "border-gray-100 active:bg-gray-50"
+                      )}
+                    >
+                      <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-2 bg-white">
+                        <img 
+                          src="/om.png" 
+                          alt="Orange Money" 
+                          className="w-full h-full object-contain p-1"
+                        />
+                      </div>
+                      <p className="font-medium text-[14px] text-gray-900">Orange Money</p>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Numéro de téléphone */}
+                <div>
+                  <Label className="text-[14px] font-medium text-gray-900">Numéro</Label>
+                  <div className="relative mt-2">
+                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                    <Input
+                      type="tel"
+                      inputMode="tel"
+                      placeholder="237XXXXXXXXX"
+                      value={phoneNumber}
+                      onChange={handlePhoneInput}
+                      className="h-12 pl-11 bg-gray-50 border-0 text-gray-900 placeholder:text-gray-400 font-mono text-[15px] rounded-2xl"
+                      maxLength={12}
+                    />
+                  </div>
+                  <p className="text-[13px] text-gray-500 mt-2">Format: 237XXXXXXXXX</p>
+                </div>
+
+                {/* Info */}
+                <div className="bg-blue-50 rounded-2xl p-4">
+                  <p className="text-[14px] font-medium text-blue-600 mb-2">Comment ça marche ?</p>
+                  <ol className="text-[13px] text-gray-600 space-y-1 list-decimal list-inside">
+                    <li>Entrez le montant et votre numéro</li>
+                    <li>Cliquez sur "Confirmer"</li>
+                    <li>Validez sur votre téléphone</li>
+                    <li>Votre compte sera crédité</li>
+                  </ol>
+                </div>
+
+                {/* Button */}
+                <Button
+                  onClick={handleDeposit}
+                  className="w-full h-[52px] bg-blue-600 hover:bg-blue-700 text-white rounded-full font-medium text-[15px] active:scale-95 transition-transform"
+                  disabled={isDepositing || !depositAmount || !phoneNumber || parseInt(depositAmount) < 200}
+                >
+                  {isDepositing ? (
+                    <div className="flex items-center gap-2">
+                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <span>Initialisation...</span>
+                    </div>
+                  ) : (
+                    `Confirmer ${depositAmount ? parseInt(depositAmount).toLocaleString() : 0} FCFA`
+                  )}
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
+
+        {/* Transactions */}
+        <div>
+          <div className="flex items-center gap-2 mb-4">
+            <History className="w-5 h-5 text-gray-500" />
+            <h2 className="font-medium text-[17px] text-gray-900">Historique</h2>
           </div>
 
           {isLoadingTx ? (
-            <div className="flex items-center justify-center p-12">
-              <div className="w-8 h-8 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
+            <div className="flex items-center justify-center py-16">
+              <div className="w-6 h-6 border-2 border-gray-100 border-t-blue-600 rounded-full animate-spin" />
             </div>
           ) : (
-            <div className="divide-y divide-border">
+            <div className="space-y-1">
               {transactions.map((tx) => (
-                <div key={tx.id} className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 active:bg-muted/30 transition-colors">
+                <div key={tx.id} className="flex items-center gap-3 py-4 active:bg-gray-50 -mx-2 px-2 rounded-2xl transition-colors">
                   <div className={cn(
-                    "w-10 h-10 rounded-xl flex items-center justify-center shrink-0",
-                    tx.points >= 0 ? "bg-success/20" : "bg-muted"
+                    "w-10 h-10 rounded-full flex items-center justify-center shrink-0",
+                    tx.points >= 0 ? "bg-green-50" : "bg-gray-50"
                   )}>
                     {tx.points >= 0 ? (
-                      <ArrowDownLeft className="w-5 h-5 text-success" />
+                      <ArrowDownLeft className="w-5 h-5 text-green-600" />
                     ) : (
-                      <ArrowUpRight className="w-5 h-5 text-muted-foreground" />
+                      <ArrowUpRight className="w-5 h-5 text-gray-500" />
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-foreground text-sm sm:text-base truncate">{tx.type_label}</p>
-                    <p className="text-xs sm:text-sm text-muted-foreground truncate">{tx.description}</p>
+                    <p className="font-medium text-[15px] text-gray-900 truncate">{tx.type_label}</p>
+                    <p className="text-[13px] text-gray-500 truncate">{tx.description}</p>
                   </div>
                   <div className="text-right shrink-0">
                     <p className={cn(
-                      "font-bold text-sm sm:text-base",
-                      tx.points >= 0 ? "text-success" : "text-foreground"
+                      "font-semibold text-[15px]",
+                      tx.points >= 0 ? "text-green-600" : "text-gray-900"
                     )}>
                       {tx.points >= 0 ? '+' : ''}{tx.points.toLocaleString()}
                     </p>
                     {tx.amount_fcfa && (
-                      <p className="text-xs text-muted-foreground whitespace-nowrap">
-                        {tx.amount_fcfa.toLocaleString()} FCFA
+                      <p className="text-[13px] text-gray-500 whitespace-nowrap">
+                        {tx.amount_fcfa.toLocaleString()} F
                       </p>
                     )}
                   </div>
@@ -478,16 +392,74 @@ export default function WalletPage() {
           )}
 
           {!isLoadingTx && transactions.length === 0 && (
-            <div className="p-8 sm:p-12 text-center">
-              <History className="w-12 h-12 mx-auto text-muted-foreground/30 mb-3" />
-              <p className="text-muted-foreground font-medium">Aucune transaction</p>
-              <p className="text-sm text-muted-foreground/70 mt-1">
-                Effectuez votre premier dépôt pour commencer
-              </p>
+            <div className="py-16 text-center">
+              <div className="text-[15px] text-gray-400 mb-2">Aucune transaction</div>
+              <div className="text-[13px] text-gray-400">Effectuez votre premier dépôt</div>
             </div>
           )}
         </div>
       </div>
+
+      {/* Payment Pending Dialog */}
+      <Dialog open={showPaymentPending} onOpenChange={setShowPaymentPending}>
+        <DialogContent className="bg-white border-gray-100 w-[calc(100%-2rem)] sm:max-w-md rounded-3xl">
+          <DialogHeader>
+            <DialogTitle className="text-[20px] font-semibold text-gray-900 text-center">
+              Paiement en attente
+            </DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-5 py-4">
+            {/* Loading */}
+            <div className="flex justify-center">
+              <div className="w-16 h-16 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin" />
+            </div>
+
+            {/* Instructions */}
+            <div className="text-center space-y-2 px-2">
+              <p className="text-[17px] font-medium text-gray-900">
+                Validez le paiement
+              </p>
+              <p className="text-[15px] text-gray-600">
+                Notification envoyée au <span className="font-mono font-medium text-gray-900 block mt-1">{phoneNumber}</span>
+              </p>
+            </div>
+
+            {/* USSD */}
+            <div className="bg-gray-50 rounded-2xl p-4 space-y-3">
+              <p className="text-[13px] font-medium text-gray-600 text-center">
+                Si la fenêtre ne s'ouvre pas :
+              </p>
+              <div className="flex items-center justify-center bg-white rounded-2xl p-5 border border-gray-100">
+                <div className="text-center">
+                  <p className="text-[13px] text-gray-500 mb-2">
+                    {pendingPaymentMethod === 'om' ? 'Orange Money' : 'MTN MoMo'}
+                  </p>
+                  <code className="text-[32px] font-bold text-blue-600 font-mono">
+                    {pendingPaymentMethod === 'om' ? '#150*50#' : '*126#'}
+                  </code>
+                  <p className="text-[13px] text-gray-500 mt-2">Composez ce code</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Status */}
+            <div className="bg-blue-50 rounded-2xl p-3">
+              <p className="text-[13px] text-center text-gray-600 leading-relaxed">
+                La vérification est automatique. Cette fenêtre se fermera dès confirmation.
+              </p>
+            </div>
+
+            {/* Close */}
+            <Button
+              className="w-full h-[48px] bg-gray-50 hover:bg-gray-100 text-gray-900 rounded-full active:scale-95 transition-transform"
+              onClick={() => setShowPaymentPending(false)}
+            >
+              Fermer
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

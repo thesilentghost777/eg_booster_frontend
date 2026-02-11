@@ -82,94 +82,104 @@ export default function WheelPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background dark flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="w-6 h-6 border-2 border-gray-100 border-t-blue-600 rounded-full animate-spin" />
       </div>
     );
   }
 
   if (!wheelEvent) {
     return (
-      <div className="min-h-screen bg-background dark">
-        <div className="gradient-dark px-4 pt-6 pb-8">
-          <div className="max-w-lg mx-auto">
-            <div className="flex items-center gap-3 mb-6">
-              <button onClick={() => navigate(-1)} className="text-muted-foreground hover:text-foreground transition-colors">
-                <ArrowLeft className="w-6 h-6" />
-              </button>
-              <h1 className="text-xl font-display font-bold text-foreground">Grande Roue</h1>
+      <div className="min-h-screen bg-white">
+        <div className="bg-white sticky top-0 z-10 border-b border-gray-100">
+          <div className="px-4 pt-6 pb-4">
+            <div className="max-w-2xl mx-auto">
+              <div className="flex items-center gap-3">
+                <button 
+                  onClick={() => navigate(-1)} 
+                  className="w-10 h-10 -ml-2 flex items-center justify-center rounded-full active:bg-gray-50 transition-colors"
+                >
+                  <ArrowLeft className="w-5 h-5 text-gray-900" />
+                </button>
+                <h1 className="text-[22px] font-semibold text-gray-900">Grande Roue</h1>
+              </div>
             </div>
           </div>
         </div>
-        <div className="px-4 max-w-lg mx-auto text-center py-12">
-          <Gift className="w-16 h-16 mx-auto text-muted-foreground/30 mb-4" />
-          <p className="text-muted-foreground">Aucun événement actif pour le moment</p>
+        <div className="px-4 max-w-2xl mx-auto text-center py-20">
+          <Gift className="w-16 h-16 mx-auto text-gray-200 mb-4" />
+          <p className="text-[15px] text-gray-400">Aucun événement actif</p>
         </div>
       </div>
     );
   }
 
-  // ✅ CORRECTION: Vérifier si l'utilisateur actuel a participé à cet événement
   const hasParticipated = wheelEvent.user_has_participated || false;
 
   return (
-    <div className="min-h-screen bg-background dark">
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <div className="gradient-dark px-4 pt-6 pb-20">
-        <div className="max-w-lg mx-auto">
-          <div className="flex items-center gap-3 mb-6">
-            <button onClick={() => navigate(-1)} className="text-muted-foreground hover:text-foreground transition-colors">
-              <ArrowLeft className="w-6 h-6" />
-            </button>
-            <h1 className="text-xl font-display font-bold text-foreground">Grande Roue</h1>
-          </div>
-
-          {/* Wheel visual */}
-          <div className="relative flex items-center justify-center py-8">
-            <div className={cn(
-              "w-64 h-64 rounded-full border-8 border-primary/30 relative",
-              isSpinning && "animate-spin"
-            )}>
-              {/* Wheel segments */}
-              <div className="absolute inset-4 rounded-full gradient-accent opacity-20" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-20 h-20 gradient-primary rounded-full shadow-glow flex items-center justify-center animate-pulse-glow">
-                  <Gift className="w-10 h-10 text-white" />
-                </div>
-              </div>
-              {/* Decorative dots */}
-              {Array.from({ length: 12 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="absolute w-3 h-3 rounded-full bg-primary"
-                  style={{
-                    top: '50%',
-                    left: '50%',
-                    transform: `rotate(${i * 30}deg) translateY(-120px)`,
-                  }}
-                />
-              ))}
-            </div>
-            {/* Arrow indicator */}
-            <div className="absolute top-4 left-1/2 -translate-x-1/2">
-              <div className="w-0 h-0 border-l-[12px] border-r-[12px] border-t-[20px] border-l-transparent border-r-transparent border-t-primary" />
+      <div className="bg-white sticky top-0 z-10 border-b border-gray-100">
+        <div className="px-4 pt-6 pb-4">
+          <div className="max-w-2xl mx-auto">
+            <div className="flex items-center gap-3">
+              <button 
+                onClick={() => navigate(-1)} 
+                className="w-10 h-10 -ml-2 flex items-center justify-center rounded-full active:bg-gray-50 transition-colors"
+              >
+                <ArrowLeft className="w-5 h-5 text-gray-900" />
+              </button>
+              <h1 className="text-[22px] font-semibold text-gray-900">Grande Roue</h1>
             </div>
           </div>
         </div>
       </div>
 
       {/* Content */}
-      <div className="px-4 -mt-8 max-w-lg mx-auto pb-24">
-        {/* Event card */}
-        <div className="bg-card rounded-2xl border border-border p-6 mb-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <Clock className="w-5 h-5 text-primary" />
-              <span className="font-medium text-foreground">Prochain tirage</span>
+      <div className="px-4 py-6 max-w-2xl mx-auto space-y-6 pb-24">
+        
+        {/* Wheel visual */}
+        <div className="relative flex items-center justify-center py-8">
+          <div className={cn(
+            "w-56 h-56 rounded-full border-8 border-blue-100 relative",
+            isSpinning && "animate-spin"
+          )}>
+            <div className="absolute inset-4 rounded-full bg-blue-50" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center animate-pulse">
+                <Gift className="w-8 h-8 text-white" />
+              </div>
             </div>
-            <span className="text-sm text-muted-foreground">
+            {/* Decorative dots */}
+            {Array.from({ length: 12 }).map((_, i) => (
+              <div
+                key={i}
+                className="absolute w-2.5 h-2.5 rounded-full bg-blue-600"
+                style={{
+                  top: '50%',
+                  left: '50%',
+                  transform: `rotate(${i * 30}deg) translateY(-108px)`,
+                }}
+              />
+            ))}
+          </div>
+          {/* Arrow */}
+          <div className="absolute top-4 left-1/2 -translate-x-1/2">
+            <div className="w-0 h-0 border-l-[10px] border-r-[10px] border-t-[16px] border-l-transparent border-r-transparent border-t-blue-600" />
+          </div>
+        </div>
+
+        {/* Event info */}
+        <div className="space-y-4">
+          {/* Next draw */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Clock className="w-5 h-5 text-gray-500" />
+              <span className="text-[15px] font-medium text-gray-900">Prochain tirage</span>
+            </div>
+            <span className="text-[13px] text-gray-500">
               {new Date(wheelEvent.scheduled_at).toLocaleDateString('fr-FR', { 
-                weekday: 'long',
+                weekday: 'short',
                 hour: '2-digit',
                 minute: '2-digit' 
               })}
@@ -177,57 +187,57 @@ export default function WheelPage() {
           </div>
 
           {/* Countdown */}
-          <div className="grid grid-cols-3 gap-4 mb-6">
+          <div className="grid grid-cols-3 gap-3">
             {[
               { value: hours, label: 'Heures' },
               { value: minutes, label: 'Minutes' },
               { value: secs, label: 'Secondes' },
             ].map((item, i) => (
               <div key={i} className="text-center">
-                <div className="bg-muted rounded-xl p-4">
-                  <span className="text-3xl font-display font-bold text-primary">
+                <div className="bg-gray-50 rounded-2xl p-4">
+                  <span className="text-[32px] font-semibold text-blue-600">
                     {item.value.toString().padStart(2, '0')}
                   </span>
                 </div>
-                <p className="text-xs text-muted-foreground mt-2">{item.label}</p>
+                <p className="text-[13px] text-gray-500 mt-2">{item.label}</p>
               </div>
             ))}
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 gap-4 mb-6">
-            <div className="bg-muted/80 rounded-xl p-4 text-center border border-border/30">
+          <div className="grid grid-cols-2 gap-3">
+            <div className="bg-gray-50 rounded-2xl p-4 text-center">
               <div className="flex items-center justify-center gap-2 mb-1">
-                <Trophy className="w-5 h-5 text-warning" />
-                <span className="text-2xl font-bold text-foreground">{wheelEvent.total_pot + 432}</span>
+                <Trophy className="w-5 h-5 text-yellow-500" />
+                <span className="text-[24px] font-semibold text-gray-900">{wheelEvent.total_pot + 432}</span>
               </div>
-              <p className="text-sm text-muted-foreground">Points à gagner</p>
+              <p className="text-[13px] text-gray-500">Points à gagner</p>
             </div>
-            <div className="bg-muted/80 rounded-xl p-4 text-center border border-border/30">
+            <div className="bg-gray-50 rounded-2xl p-4 text-center">
               <div className="flex items-center justify-center gap-2 mb-1">
-                <Users className="w-5 h-5 text-secondary" />
-                <span className="text-2xl font-bold text-foreground">{wheelEvent.participants_count + 432}</span>
+                <Users className="w-5 h-5 text-blue-600" />
+                <span className="text-[24px] font-semibold text-gray-900">{wheelEvent.participants_count + 432}</span>
               </div>
-              <p className="text-sm text-muted-foreground">Participants</p>
+              <p className="text-[13px] text-gray-500">Participants</p>
             </div>
           </div>
 
           {/* Winner announcement */}
           {wheelEvent.status === 'termine' && wheelEvent.winner && (
-            <div className="bg-success/20 text-success rounded-xl p-4 text-center mb-6">
-              <Trophy className="w-8 h-8 mx-auto mb-2" />
-              <p className="font-semibold text-lg">🎉 Gagnant: {wheelEvent.winner.prenom}!</p>
-              <p className="text-sm opacity-80">+{wheelEvent.total_pot} points</p>
+            <div className="bg-green-50 rounded-2xl p-5 text-center">
+              <Trophy className="w-8 h-8 mx-auto mb-2 text-green-600" />
+              <p className="font-semibold text-[17px] text-gray-900">🎉 Gagnant: {wheelEvent.winner.prenom}!</p>
+              <p className="text-[15px] text-green-600 mt-1">+{wheelEvent.total_pot} points</p>
             </div>
           )}
 
           {/* Participate button */}
           {wheelEvent.status === 'en_attente' && (
             hasParticipated ? (
-              <div className="bg-success/20 text-success rounded-xl p-4 text-center">
-                <Sparkles className="w-6 h-6 mx-auto mb-2" />
-                <p className="font-semibold">Vous participez ! 🎉</p>
-                <p className="text-sm opacity-80">
+              <div className="bg-green-50 rounded-2xl p-5 text-center">
+                <Sparkles className="w-6 h-6 mx-auto mb-2 text-green-600" />
+                <p className="font-semibold text-[15px] text-gray-900">Vous participez ! 🎉</p>
+                <p className="text-[13px] text-gray-600 mt-1">
                   Rendez-vous {new Date(wheelEvent.scheduled_at).toLocaleDateString('fr-FR', { 
                     weekday: 'long',
                     hour: '2-digit',
@@ -238,11 +248,11 @@ export default function WheelPage() {
             ) : (
               <Button
                 onClick={handleParticipate}
-                className="w-full h-14 gradient-accent text-white rounded-xl shadow-glow"
+                className="w-full h-[52px] bg-blue-600 hover:bg-blue-700 text-white rounded-full text-[15px] font-medium active:scale-95 transition-transform"
                 disabled={isParticipating}
               >
                 {isParticipating ? (
-                  <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 ) : (
                   <>
                     <Gift className="w-5 h-5 mr-2" />
@@ -255,34 +265,34 @@ export default function WheelPage() {
         </div>
 
         {/* History */}
-        <div className="bg-card rounded-2xl border border-border overflow-hidden">
-          <div className="flex items-center gap-2 p-4 border-b border-border">
-            <History className="w-5 h-5 text-muted-foreground" />
-            <h2 className="font-semibold text-foreground">Historique des tirages</h2>
+        <div className="pt-4">
+          <div className="flex items-center gap-2 mb-4">
+            <History className="w-5 h-5 text-gray-500" />
+            <h2 className="font-medium text-[17px] text-gray-900">Historique</h2>
           </div>
 
-          <div className="divide-y divide-border">
+          <div className="space-y-1">
             {history.map((item) => (
-              <div key={item.id} className="flex items-center gap-4 p-4">
-                <div className="w-10 h-10 bg-warning/20 rounded-xl flex items-center justify-center">
-                  <Trophy className="w-5 h-5 text-warning" />
+              <div key={item.id} className="flex items-center gap-3 py-4 active:bg-gray-50 -mx-2 px-2 rounded-2xl transition-colors">
+                <div className="w-10 h-10 bg-yellow-50 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Trophy className="w-5 h-5 text-yellow-500" />
                 </div>
-                <div className="flex-1">
-                  <p className="font-medium text-foreground">{item.winner} a gagné</p>
-                  <p className="text-sm text-muted-foreground">{item.date}</p>
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium text-[15px] text-gray-900">{item.winner} a gagné</p>
+                  <p className="text-[13px] text-gray-500">{item.date}</p>
                 </div>
-                <div className="text-right">
-                  <p className="font-bold text-success">+{item.total_pot} pts</p>
-                  <p className="text-xs text-muted-foreground">{item.participants_count} participants</p>
+                <div className="text-right shrink-0">
+                  <p className="font-semibold text-[15px] text-green-600">+{item.total_pot} pts</p>
+                  <p className="text-[13px] text-gray-500">{item.participants_count} participants</p>
                 </div>
               </div>
             ))}
           </div>
 
           {history.length === 0 && (
-            <div className="p-8 text-center">
-              <History className="w-12 h-12 mx-auto text-muted-foreground/30 mb-3" />
-              <p className="text-muted-foreground">Aucun historique</p>
+            <div className="py-16 text-center">
+              <History className="w-12 h-12 mx-auto text-gray-200 mb-3" />
+              <p className="text-[15px] text-gray-400">Aucun historique</p>
             </div>
           )}
         </div>

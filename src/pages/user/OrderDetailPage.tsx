@@ -24,7 +24,6 @@ export default function OrderDetailPage() {
   const { user, refreshUser } = useAuth();
   const [service, setService] = useState<Service | null>(null);
   const [link, setLink] = useState('');
-  const [notes, setNotes] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingService, setIsLoadingService] = useState(true);
@@ -113,8 +112,8 @@ export default function OrderDetailPage() {
 
   if (isLoadingService) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loader2 className="w-12 h-12 text-primary animate-spin" />
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <Loader2 className="w-12 h-12 text-blue-600 animate-spin" />
       </div>
     );
   }
@@ -127,47 +126,50 @@ export default function OrderDetailPage() {
   const PlatformIcon = platformIcons[service.platform];
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <div className="safe-area-top" />
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <div className="flex items-center gap-4 px-5 py-4 border-b border-border/50">
-        <button onClick={() => navigate(-1)} className="text-muted-foreground hover:text-foreground active:scale-95 transition-all p-1">
-          <ArrowLeft className="w-6 h-6" />
-        </button>
-        <h1 className="text-lg font-bold text-foreground">Commander</h1>
+      <div className="sticky top-0 z-10 bg-white border-b border-gray-100">
+        <div className="flex items-center gap-3 px-4 py-3 max-w-2xl mx-auto">
+          <button 
+            onClick={() => navigate(-1)} 
+            className="p-2 -ml-2 hover:bg-gray-50 rounded-full transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5 text-gray-900" />
+          </button>
+          <h1 className="text-xl font-semibold text-gray-900">Commander</h1>
+        </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-5 py-5 pb-safe space-y-5">
+      <div className="max-w-2xl mx-auto px-4 py-6 space-y-6">
         {/* Service Info */}
-        <div className="flex items-center gap-4 p-4 rounded-2xl bg-card border border-border/50 shadow-sm">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center flex-shrink-0">
-            {PlatformIcon ? <PlatformIcon className="w-8 h-8 text-foreground" /> : <FaWhatsapp className="w-8 h-8 text-foreground" />}
+        <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-2xl">
+          <div className="w-14 h-14 bg-white rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
+            {PlatformIcon ? <PlatformIcon className="w-7 h-7 text-gray-900" /> : <FaWhatsapp className="w-7 h-7 text-gray-900" />}
           </div>
           <div className="flex-1 min-w-0">
-            <h2 className="font-bold text-foreground">{service.label}</h2>
-            <p className="text-sm text-muted-foreground line-clamp-2">{service.description}</p>
+            <h2 className="font-semibold text-gray-900">{service.label}</h2>
+            <p className="text-sm text-gray-500 line-clamp-2">{service.description}</p>
           </div>
         </div>
 
         {/* Price & Balance */}
         <div className="grid grid-cols-2 gap-3">
-          <div className="p-4 rounded-2xl bg-card border border-border/50 text-center">
-            <p className="text-xs text-muted-foreground mb-1">Prix unitaire</p>
-            <p className="text-lg font-bold text-foreground">{service.price_points} <span className="text-xs font-normal text-muted-foreground">points</span></p>
+          <div className="p-4 bg-gray-50 rounded-2xl text-center">
+            <p className="text-xs text-gray-500 mb-1">Prix unitaire</p>
+            <p className="text-lg font-semibold text-gray-900">{service.price_points} <span className="text-sm font-normal text-gray-500">points</span></p>
           </div>
-          <div className="p-4 rounded-2xl bg-card border border-border/50 text-center">
-            <p className="text-xs text-muted-foreground mb-1">Votre solde</p>
-            <p className="text-lg font-bold text-foreground">{user?.points_balance?.toLocaleString() || 0} <span className="text-xs font-normal text-muted-foreground">pts</span></p>
+          <div className="p-4 bg-gray-50 rounded-2xl text-center">
+            <p className="text-xs text-gray-500 mb-1">Votre solde</p>
+            <p className="text-lg font-semibold text-gray-900">{user?.points_balance?.toLocaleString() || 0} <span className="text-sm font-normal text-gray-500">pts</span></p>
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-6">
           {/* Link */}
           <div>
-            <h3 className="font-bold text-foreground mb-3">Informations de commande</h3>
             <div className="flex items-center gap-2 mb-2">
-              <LinkIcon className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium text-foreground">Lien de votre publication <span className="text-destructive">*</span></span>
+              <LinkIcon className="w-4 h-4 text-blue-600" />
+              <span className="text-sm font-medium text-gray-900">Lien de votre publication <span className="text-red-600">*</span></span>
             </div>
             <Input
               type="url"
@@ -175,16 +177,16 @@ export default function OrderDetailPage() {
               value={link}
               onChange={(e) => setLink(e.target.value)}
               disabled={isLoading}
-              className="h-12 bg-muted/80 border border-border/50 rounded-xl text-foreground placeholder:text-muted-foreground/60"
+              className="h-12 bg-gray-50 border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-400 focus:bg-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             />
-            <p className="text-xs text-muted-foreground mt-1.5">Collez le lien complet de votre publication {service.platform}</p>
+            <p className="text-xs text-gray-500 mt-1.5">Collez le lien complet de votre publication {service.platform}</p>
           </div>
 
           {/* Quantity */}
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <Package className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium text-foreground">Nombre de packs <span className="text-destructive">*</span></span>
+              <Package className="w-4 h-4 text-blue-600" />
+              <span className="text-sm font-medium text-gray-900">Nombre de packs <span className="text-red-600">*</span></span>
             </div>
             <div className="flex items-center gap-3">
               <Button
@@ -192,7 +194,7 @@ export default function OrderDetailPage() {
                 onClick={decrementQuantity}
                 disabled={quantity <= 1 || isLoading}
                 variant="outline"
-                className="h-12 w-12 rounded-xl border-2 border-primary/50 bg-primary/10 hover:bg-primary/20 text-foreground font-bold text-xl disabled:opacity-50"
+                className="h-12 w-12 rounded-xl bg-gray-50 border-gray-200 hover:bg-gray-100 text-gray-900 disabled:opacity-50"
               >
                 <Minus className="w-5 h-5" />
               </Button>
@@ -203,37 +205,41 @@ export default function OrderDetailPage() {
                 value={quantity}
                 onChange={(e) => handleQuantityChange(e.target.value)}
                 disabled={isLoading}
-                className="h-12 text-center bg-muted/80 border border-border/50 rounded-xl text-foreground font-bold text-lg flex-1"
+                className="h-12 text-center bg-gray-50 border-gray-200 rounded-xl text-gray-900 font-semibold text-lg flex-1 focus:bg-white focus:border-blue-500"
               />
               <Button
                 type="button"
                 onClick={incrementQuantity}
                 disabled={quantity >= 100 || isLoading}
                 variant="outline"
-                className="h-12 w-12 rounded-xl border-2 border-primary/50 bg-primary/10 hover:bg-primary/20 text-foreground font-bold text-xl disabled:opacity-50"
+                className="h-12 w-12 rounded-xl bg-gray-50 border-gray-200 hover:bg-gray-100 text-gray-900 disabled:opacity-50"
               >
                 <Plus className="w-5 h-5" />
               </Button>
             </div>
-            <p className="text-xs text-muted-foreground mt-1.5">Vous pouvez commander entre 1 et 100 packs</p>
+            <p className="text-xs text-gray-500 mt-1.5">Entre 1 et 100 packs</p>
           </div>
 
           {/* Insufficient balance */}
           {!hasEnoughPoints && (
-            <div className="flex items-center gap-3 p-4 rounded-2xl bg-destructive/10 border border-destructive/20">
-              <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0" />
+            <div className="flex items-center gap-3 p-4 bg-red-50 border border-red-200 rounded-2xl">
+              <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0" />
               <div className="flex-1">
-                <p className="text-sm font-semibold text-destructive">Solde insuffisant</p>
-                <p className="text-xs text-destructive/80">Il vous manque {(totalPrice - (user?.points_balance || 0)).toLocaleString()} points.</p>
+                <p className="text-sm font-medium text-red-900">Solde insuffisant</p>
+                <p className="text-xs text-red-700">Il vous manque {(totalPrice - (user?.points_balance || 0)).toLocaleString()} points.</p>
               </div>
-              <Button onClick={() => navigate('/wallet')} size="sm" variant="outline" className="border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground">
+              <Button 
+                onClick={() => navigate('/wallet')} 
+                size="sm" 
+                className="bg-red-600 hover:bg-red-700 text-white rounded-xl"
+              >
                 Recharger
               </Button>
             </div>
           )}
 
           {/* Summary */}
-          <div className="space-y-2 p-4 rounded-2xl bg-card border border-border/50">
+          <div className="space-y-3 p-4 bg-gray-50 rounded-2xl border border-gray-200">
             {[
               ['Service', service.label],
               ['Quantité par pack', service.quantity.toLocaleString()],
@@ -241,14 +247,14 @@ export default function OrderDetailPage() {
               ['Prix unitaire', `${service.price_points} points`],
               ['Total à recevoir', totalQuantity.toLocaleString()],
             ].map(([label, value]) => (
-              <div key={label} className="flex justify-between items-center py-1.5">
-                <span className="text-sm text-muted-foreground">{label}</span>
-                <span className="text-sm font-semibold text-foreground">{value}</span>
+              <div key={label} className="flex justify-between items-center">
+                <span className="text-sm text-gray-600">{label}</span>
+                <span className="text-sm font-medium text-gray-900">{value}</span>
               </div>
             ))}
-            <div className="border-t border-border/50 pt-2 mt-2 flex justify-between items-center">
-              <span className="text-sm font-bold text-foreground">Total à payer</span>
-              <span className="text-lg font-bold text-primary">{totalPrice.toLocaleString()} points</span>
+            <div className="border-t border-gray-200 pt-3 mt-3 flex justify-between items-center">
+              <span className="text-sm font-semibold text-gray-900">Total à payer</span>
+              <span className="text-lg font-semibold text-blue-600">{totalPrice.toLocaleString()} points</span>
             </div>
           </div>
 
@@ -256,24 +262,24 @@ export default function OrderDetailPage() {
           <Button
             type="submit"
             disabled={isLoading || !hasEnoughPoints || !link.trim()}
-            className="w-full h-14 gradient-primary text-white font-semibold rounded-2xl active:scale-[0.97] transition-transform disabled:opacity-50"
+            className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? (
               <>
                 <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                Traitement de {quantity} commande{quantity > 1 ? 's' : ''}...
+                Traitement...
               </>
             ) : (
               <>
                 <Zap className="w-5 h-5 mr-2" />
-                Confirmer {quantity} pack{quantity > 1 ? 's' : ''}
+                Confirmer {quantity > 1 ? `${quantity} packs` : 'la commande'}
               </>
             )}
           </Button>
 
-          <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1"><CheckCircle className="w-4 h-4 text-success" /> Paiement sécurisé</span>
-            <span className="flex items-center gap-1"><CheckCircle className="w-4 h-4 text-success" /> Livraison rapide</span>
+          <div className="flex items-center justify-center gap-4 text-xs text-gray-500">
+            <span className="flex items-center gap-1"><CheckCircle className="w-4 h-4 text-green-600" /> Paiement sécurisé</span>
+            <span className="flex items-center gap-1"><CheckCircle className="w-4 h-4 text-green-600" /> Livraison rapide</span>
           </div>
         </form>
       </div>
